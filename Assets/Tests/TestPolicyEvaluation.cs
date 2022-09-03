@@ -1,23 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NUnit.Framework;
 
-public class TestPolicyEvaluation : MonoBehaviour
-{ 
-
-    // Start is called before the first frame update
-    void Start()
-    { 
-        Debug.Log("EvaluationOnFourStateGridWorld() : " + EvaluationOnFourStateGridWorld());
-        Debug.Log("EvaluationOnSixteenStateGridWorld(): " + EvaluationOnSixteenStateGridWorld());
-    }
-
-    /// <summary>
-    /// Uses the dynamics from CreateFourStateGridWorldDynamics() and evaluate the state value.
-    /// This uses a policy where the agent goes 50/50 either up or left.
-    /// </summary>
-    /// <returns></returns>
-    public bool EvaluationOnFourStateGridWorld(int verbose = 0)
+public class TestPolicyEvaluation
+{
+    [Test]
+    public void EvaluationOnFourStateGridWorld()
     {
 
         SystemDynamic systemDynamic = new SystemDynamic(TestHelpers.CreateFourStateGridWorldDynamicsMatrix());
@@ -50,25 +39,17 @@ public class TestPolicyEvaluation : MonoBehaviour
 
         float[] newStateValue = PolicyEvaluation.Evaluate(valueInitialisation, systemDynamic, reward, 1, policy);
 
-        if(verbose >= 1)
-        {
-            Debug.Log(newStateValue[0]);
-            Debug.Log(newStateValue[1]);
-            Debug.Log(newStateValue[2]);
-            Debug.Log(newStateValue[3]);
-        }
-
-
         if (MathHelpers.CloseTo(newStateValue[0], 0, 0.01f) && MathHelpers.CloseTo(newStateValue[1], -2, 0.01f) &&
             MathHelpers.CloseTo(newStateValue[2], -2, 0.01f) && MathHelpers.CloseTo(newStateValue[3], -3, 0.01f))
         {
-            return true;
+            Assert.IsTrue(true);
         }
         else
-            return false;    
+            Assert.IsTrue(false);
     }
 
-    public bool EvaluationOnSixteenStateGridWorld(int verbose = 0)
+    [Test]
+    public void EvaluationOnSixteenStateGridWorld()
     {
 
         SystemDynamic systemDynamic = new SystemDynamic(TestHelpers.CreateSixteenStateGridWorldDynamicsListSingleDynamics());
@@ -79,7 +60,7 @@ public class TestPolicyEvaluation : MonoBehaviour
         Reward reward = new Reward(rewardVector);
 
         float[] valueInitialisation = new float[16];
-        for(int i = 0; i < 16; i++)
+        for (int i = 0; i < 16; i++)
         {
             valueInitialisation[i] = 0;
         }
@@ -90,7 +71,7 @@ public class TestPolicyEvaluation : MonoBehaviour
         {
             for (int j = 0; j < 4; j++)
             {
-                    policyMatrix[i, j] = 0.25f;
+                policyMatrix[i, j] = 0.25f;
             }
         }
 
@@ -98,29 +79,17 @@ public class TestPolicyEvaluation : MonoBehaviour
 
         float[] newStateValue = PolicyEvaluation.Evaluate(valueInitialisation, systemDynamic, reward, 1, policy, 100);
 
-        if(verbose >= 1)
+        float[] expectedResult = new float[] { 0, -14, -20, -22, -14, -18, -20, -20, -20, -20, -18, -14, -22, -20, -14, 0 };
+
+        for (int i = 0; i < 16; i++)
         {
-            Debug.Log("state value result of evaluation on EvaluationOnSixteenStateGridWorld : ");
-            for (int i = 0; i < 16; i++)
+            if (!MathHelpers.CloseTo(newStateValue[i], expectedResult[i], 0.01f))
             {
-                Debug.Log("state value " + i + " = " +newStateValue[i]);
+                Assert.IsTrue(false);
             }
         }
 
-        float[] expectedResult = new float[] {0,-14,-20,-22,-14,-18,-20,-20,-20,-20,-18,-14,-22,-20,-14,0 };
-
-        for(int i=0; i < 16; i++)
-        {
-            if (!MathHelpers.CloseTo(newStateValue[i], expectedResult[i],0.01f))
-            {
-                return false;
-            }
-        }
-
-        return true;
+        Assert.IsTrue(true);
 
     }
-
-
-
 }

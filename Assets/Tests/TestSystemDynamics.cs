@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NUnit.Framework;
 
-public class TestSystemDynamics : MonoBehaviour
+public class TestSystemDynamics
 {
-
     public enum Action
     {
         up,
@@ -15,27 +15,16 @@ public class TestSystemDynamics : MonoBehaviour
 
     public enum Reward
     {
-        neg, 
+        neg,
         end
     }
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        Debug.Log("TestSystemDynamicCreationFromSingleDynamics() : " + TestSystemDynamicCreationFromSingleDynamics());
-    }
-
-    /// <summary>
-    /// creates a state dynamic which must corresponds to the state dynamic manually created using CreateFourStateGridWorldDynamics()
-    /// </summary>
-    /// <returns></returns>
-    private bool TestSystemDynamicCreationFromSingleDynamics()
+    [Test]
+    public void TestSystemDynamicCreationFromSingleDynamics()
     {
         List<SystemDynamic.SingleDynamic> singleDynamics = new List<SystemDynamic.SingleDynamic>();
 
-        singleDynamics.Add(new SystemDynamic.SingleDynamic(0, (int)Action.up, (int)Reward.end,0,1));
+        singleDynamics.Add(new SystemDynamic.SingleDynamic(0, (int)Action.up, (int)Reward.end, 0, 1));
         singleDynamics.Add(new SystemDynamic.SingleDynamic(0, (int)Action.right, (int)Reward.end, 0, 1));
         singleDynamics.Add(new SystemDynamic.SingleDynamic(0, (int)Action.down, (int)Reward.end, 0, 1));
         singleDynamics.Add(new SystemDynamic.SingleDynamic(0, (int)Action.left, (int)Reward.end, 0, 1));
@@ -56,6 +45,8 @@ public class TestSystemDynamics : MonoBehaviour
         singleDynamics.Add(new SystemDynamic.SingleDynamic(3, (int)Action.left, (int)Reward.neg, 2, 1));
 
         SystemDynamic systemDynamic = new SystemDynamic(singleDynamics);
-        return SystemDynamic.AreEqualDynamics(systemDynamic, new SystemDynamic(TestHelpers.CreateFourStateGridWorldDynamicsMatrix()));
+        Assert.IsTrue(SystemDynamic.AreEqualDynamics(systemDynamic, new SystemDynamic(TestHelpers.CreateFourStateGridWorldDynamicsMatrix())));
     }
+
+
 }

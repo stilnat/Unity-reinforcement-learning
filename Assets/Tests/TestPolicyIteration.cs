@@ -1,17 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
-public class TestPolicyIteration : MonoBehaviour
+public class TestPolicyIteration
 {
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Debug.Log("TestPolicyIterationOnSixteenStatesGridWorld : " + TestPolicyIterationOnSixteenStatesGridWorld(0));   
-    }
-
-    bool TestPolicyIterationOnSixteenStatesGridWorld(int verbose = 0)
+    [Test]
+    public void TestPolicyIterationOnSixteenStatesGridWorld()
     {
         SystemDynamic systemDynamic = new SystemDynamic(TestHelpers.CreateSixteenStateGridWorldDynamicsListSingleDynamics());
 
@@ -69,21 +66,6 @@ public class TestPolicyIteration : MonoBehaviour
 
         Policy test = new Policy(new MatrixND(m));
 
-        if (verbose == 1)
-        {
-            Debug.Log("Optimal policy computed:");
-            policy.Print();
-            Debug.Log("Expected policy : ");
-            test.Print();
-            Debug.Log("Optimal state value : ");
-            for (int i = 0; i < 16; i++)
-            {
-                Debug.Log("s" + i + ": " + optimalEvaluation[i]);
-            }
-
-        }
-
-        return test == policy;
-
+        Assert.IsTrue(test == policy);
     }
 }
