@@ -44,14 +44,14 @@ public class SystemDynamic
     /// <summary>
     /// A matrix containing every single dynamic of the system.
     /// </summary>
-    private float[,,,] _dynamicMatrix;
+    private MatrixND _dynamicMatrix;
 
     /// <summary>
     /// Set a singular dynamic in the system
     /// </summary>
     public void SetDynamic(int sp, int r, int s, int a, float p)
     {
-        _dynamicMatrix[sp, r, s, a] = p;
+        _dynamicMatrix.Set(p,sp,r,s,a);
         if (!VerifyDynamics(_dynamicMatrix))
         {
             throw new System.Exception("The dynamic matrix probabilities are not all summing up to 1");
@@ -63,11 +63,11 @@ public class SystemDynamic
     /// </summary>
     public float GetDynamic(int sp, int r, int s, int a)
     {
-        return _dynamicMatrix[sp, r, s, a];
+        return _dynamicMatrix.Get(sp, r, s, a);
     }
 
 
-    public SystemDynamic(float[,,,] dynamicMatrix)
+    public SystemDynamic(MatrixND dynamicMatrix)
     {
         if (VerifyDynamics(dynamicMatrix))
         {
@@ -79,7 +79,7 @@ public class SystemDynamic
     /// <summary>
     /// Verifies if the sum of every probabilities of getting into state sp and getting reward r by choosing action a in state s amounts to one.
     /// </summary>
-    private bool VerifyDynamics(float[,,,] dm)
+    private bool VerifyDynamics(MatrixND dm)
     {
         float sum = 0;
         for (int s = 0; s < dm.GetLength(2); s++)
@@ -91,7 +91,7 @@ public class SystemDynamic
                 {
                     for (int r = 0; r < dm.GetLength(1); r++)
                     {
-                        sum += dm[sp, r, s, a];
+                        sum += dm.Get(sp, r, s, a);
                     }                   
                 }
 
@@ -103,23 +103,11 @@ public class SystemDynamic
     }
 
     /// <summary>
-    /// Initialise the dynamic matrix to zero.
+    /// Initialise the dynamic matrix to any value
     /// </summary>
-    public void InitialiseToZero()
+    public void InitialiseTo(float value )
     {
-        for(int i =0; i< _dynamicMatrix.GetLength(0); i++)
-        {
-            for (int j = 0; j < _dynamicMatrix.GetLength(1); j++)
-            {
-                for (int k = 0; k < _dynamicMatrix.GetLength(2); k++)
-                {
-                    for (int l = 0; l < _dynamicMatrix.GetLength(3); l++)
-                    {
-                        _dynamicMatrix[i,j,k,l] = 0;
-                    }
-                }
-            }
-        }
+        _dynamicMatrix.InitializeTo(value);
     }
 
     /// <summary>
@@ -128,13 +116,13 @@ public class SystemDynamic
     public SystemDynamic(List<SingleDynamic> singleDynamics)
     {
         int[] dims =DefineDimensions(singleDynamics);
-        _dynamicMatrix = new float[dims[0], dims[1], dims[2], dims[3]];
+        _dynamicMatrix = new MatrixND(dims[0], dims[1], dims[2], dims[3]);
 
-        InitialiseToZero();
+        _dynamicMatrix.InitializeTo(0);
 
         foreach (SingleDynamic sd in singleDynamics)
         {
-            _dynamicMatrix[sd.SP, sd.R, sd.S, sd.A] = sd.P; 
+            _dynamicMatrix.Set(sd.P, sd.SP, sd.R, sd.S, sd.A); 
         }
     }
 
@@ -163,32 +151,7 @@ public class SystemDynamic
 
     public static bool AreEqualDynamics(SystemDynamic sd1, SystemDynamic sd2)
     {
-        if (sd1._dynamicMatrix.GetLength(0) == sd2._dynamicMatrix.GetLength(0) &&
-            sd1._dynamicMatrix.GetLength(1) == sd2._dynamicMatrix.GetLength(1) &&
-            sd1._dynamicMatrix.GetLength(2) == sd2._dynamicMatrix.GetLength(2) &&
-            sd1._dynamicMatrix.GetLength(3) == sd2._dynamicMatrix.GetLength(3))
-        {
-            for (int i = 0; i < sd1._dynamicMatrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < sd1._dynamicMatrix.GetLength(1); j++)
-                {
-                    for (int k = 0; k < sd1._dynamicMatrix.GetLength(2); k++)
-                    {
-                        for (int l = 0; l < sd1._dynamicMatrix.GetLength(3); l++)
-                        {
-                            if(sd1._dynamicMatrix[i,j,k,l] != sd2._dynamicMatrix[i, j, k, l])
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
-        else
-            return false;
+        return sd1._dynamicMatrix == sd2._dynamicMatrix ? true : false;
     }
 
     public int getActionNumber()

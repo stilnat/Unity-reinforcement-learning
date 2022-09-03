@@ -98,7 +98,7 @@ public class MarkovDecisionProcess
                 }
             }
         }
-        _policy = new Policy(randomPolicyMatrix);
+        _policy = new Policy(new MatrixND(randomPolicyMatrix));
     }
 
 

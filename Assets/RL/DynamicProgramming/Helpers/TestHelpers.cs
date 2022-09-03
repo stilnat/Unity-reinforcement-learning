@@ -19,7 +19,7 @@ public static class TestHelpers
         end
     }
 
-    public static float[,,,] CreateFourStateGridWorldDynamicsMatrix()
+    public static MatrixND CreateFourStateGridWorldDynamicsMatrix()
     {
         // simple example for a 4 case gridworld with reward -1 at each step except the terminal state.
         float[,,,] dynamicMatrix = new float[4, 2, 4, 4];
@@ -199,7 +199,7 @@ public static class TestHelpers
         dynamicMatrix[3, 1, 3, 2] = 0;
         dynamicMatrix[3, 1, 3, 3] = 0;
 
-        return dynamicMatrix;
+        return new MatrixND(dynamicMatrix);
 
     }
 

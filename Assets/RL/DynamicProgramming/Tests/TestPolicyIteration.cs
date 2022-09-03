@@ -36,7 +36,7 @@ public class TestPolicyIteration : MonoBehaviour
             }
         }
 
-        Policy policy = new Policy(policyMatrix);
+        Policy policy = new Policy(new MatrixND(policyMatrix));
 
         var res = PolicyIteration.Iterate(valueInitialisation, systemDynamic, reward, 1, policy, 100, 0);
 
@@ -67,7 +67,7 @@ public class TestPolicyIteration : MonoBehaviour
         m[14, 1] = 1;
         m[15, 3] = 1;
 
-        Policy test = new Policy(m);
+        Policy test = new Policy(new MatrixND(m));
 
         if (verbose == 1)
         {

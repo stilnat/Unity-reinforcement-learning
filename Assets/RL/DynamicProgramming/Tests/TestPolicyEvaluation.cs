@@ -46,7 +46,7 @@ public class TestPolicyEvaluation : MonoBehaviour
             }
         }
 
-        Policy policy = new Policy(policyMatrix);
+        Policy policy = new Policy(new MatrixND(policyMatrix));
 
         float[] newStateValue = PolicyEvaluation.Evaluate(valueInitialisation, systemDynamic, reward, 1, policy);
 
@@ -94,7 +94,7 @@ public class TestPolicyEvaluation : MonoBehaviour
             }
         }
 
-        Policy policy = new Policy(policyMatrix);
+        Policy policy = new Policy(new MatrixND(policyMatrix));
 
         float[] newStateValue = PolicyEvaluation.Evaluate(valueInitialisation, systemDynamic, reward, 1, policy, 100);
 

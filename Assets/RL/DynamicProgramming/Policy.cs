@@ -7,14 +7,14 @@ public class Policy
     /// <summary>
     /// Dimension one is for states, dimension two is for actions.
     /// </summary>
-    private float[,] _policyMatrix;
+    private MatrixND _policyMatrix;
 
     /// <summary>
     /// The policy pi, choosing action a knowing state s is a probability distribution, therefore the sum of pi(a|s) for all action a, must equal one.
     /// </summary>
     /// <param name="p">a two dimensional array representing the policy matrix, i.e. every probability pi(a|s) for every action a and state s. </param>
     /// <returns></returns>
-    private bool VerifyPolicy(float[,] p)
+    private bool VerifyPolicy(MatrixND p)
     {
         float sum = 0;
         for (int s = 0; s < p.GetLength(0); s++)
@@ -22,7 +22,7 @@ public class Policy
             for (int a = 0; a < p.GetLength(1); a++)
             {
 
-                sum += p[s,a];
+                sum += p.Get(s,a);
             }
             if (sum != 1) return false;
             else sum = 0;
@@ -42,15 +42,15 @@ public class Policy
         {
             throw new System.Exception("Probabilities must be between 0 and 1 included.");
         }
-        _policyMatrix[state, action] = prob;
+        _policyMatrix.Set(prob, state, action);
     }
 
     public float GetStateAction(int state, int action)
     {
-        return _policyMatrix[state, action];
+        return _policyMatrix.Get(state, action);
     }
 
-    public Policy(float[,] policyMatrix)
+    public Policy(MatrixND policyMatrix)
     {
         if (VerifyPolicy(policyMatrix))
             _policyMatrix = policyMatrix;
@@ -78,23 +78,7 @@ public class Policy
 
         Policy p2 = (Policy)obj;
 
-        if (_policyMatrix.GetLength(0) != p2._policyMatrix.GetLength(0) || _policyMatrix.GetLength(1) != p2._policyMatrix.GetLength(1))
-        {
-            return false;
-        }
-
-        for (int i = 0; i < _policyMatrix.GetLength(0);i++)
-        {
-            for (int j = 0; j < _policyMatrix.GetLength(1);j++)
-            {
-                if(_policyMatrix[i,j] != p2._policyMatrix[i,j])
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        return _policyMatrix == p2._policyMatrix;
     }
 
     /// <summary>
@@ -109,7 +93,7 @@ public class Policy
             line = "s" + i + "  ";
             for (int j = 0; j < _policyMatrix.GetLength(1); j++)
             {
-                line += _policyMatrix[i,j] + " ";
+                line += _policyMatrix.Get(i,j) + " ";
             }
             Debug.Log(line);
         }

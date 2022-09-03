@@ -13,21 +13,46 @@ public class MatrixND
     {
         //TODO : check if all elements of dimensions are positive.
         _dimensions = dimensions;
+        InitializeDimensionsProduct(dimensions);
+        InitializeArray(dimensions);
+    }
 
-        _dimensionsProduct = new int[dimensions.Length];
-        _dimensionsProduct[0] = 1;
-        for(int i=1; i<dimensions.Length; i++) // works
+    public MatrixND(float[,] array)
+    {
+        _dimensions = new int[2] { array.GetLength(0), array.GetLength(1) };
+
+        InitializeDimensionsProduct(_dimensions);
+        InitializeArray(_dimensions);
+
+        for(int i=0; i < _dimensions[0]; i++)
         {
-            _dimensionsProduct[i] = _dimensionsProduct[i-1] * dimensions[dimensions.Length-i];
+            for (int j = 0; j < _dimensions[1]; j++)
+            {
+                Set(array[i, j], i, j);
+            }
         }
+    }
 
-        int allDimensionsProduct = 1;
-        for (int i = 0; i < dimensions.Length; i++) // works
+    public MatrixND(float[,,,] array)
+    {
+        _dimensions = new int[4] { array.GetLength(0), array.GetLength(1), array.GetLength(2), array.GetLength(3) };
+
+        InitializeDimensionsProduct(_dimensions);
+        InitializeArray(_dimensions);
+
+        for (int i = 0; i < _dimensions[0]; i++)
         {
-            allDimensionsProduct *= dimensions[i];
+            for (int j = 0; j < _dimensions[1]; j++)
+            {
+                for (int k = 0; k < _dimensions[2]; k++)
+                {
+                    for (int l = 0; l < _dimensions[3]; l++)
+                    {
+                        Set(array[i, j,k,l], i, j, k, l);
+                    }
+                }
+            }
         }
-
-        _array = new float[allDimensionsProduct];
     }
 
     public float Get(params int[] indexes)
@@ -151,6 +176,32 @@ public class MatrixND
         }
 
         return true;
+    }
+
+    public int GetLength(int dimension)
+    {
+        return _dimensions[dimension];
+    }
+
+    private void InitializeDimensionsProduct(params int[] dimensions)
+    {
+        _dimensionsProduct = new int[dimensions.Length];
+        _dimensionsProduct[0] = 1;
+        for (int i = 1; i < dimensions.Length; i++) // works
+        {
+            _dimensionsProduct[i] = _dimensionsProduct[i - 1] * dimensions[dimensions.Length - i];
+        }
+    }
+
+    private void InitializeArray(params int[] dimensions)
+    {
+        int allDimensionsProduct = 1;
+        for (int i = 0; i < dimensions.Length; i++) // works
+        {
+            allDimensionsProduct *= dimensions[i];
+        }
+
+        _array = new float[allDimensionsProduct];
     }
 
 }
