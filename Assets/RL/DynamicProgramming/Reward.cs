@@ -2,13 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Reward 
+public class Reward
 {
-    public float[] _rewardVector;
+    private float _value;
 
-    //TODO : check if there's duplicate reward. Every value should be unique.
-    public Reward(float[] rewardVector)
+    public float Value
     {
-        _rewardVector = rewardVector;
+        get { return _value; }
+        set { _value = value; }
     }
+
+    public Reward(float reward)
+    {
+        _value = reward;
+    }
+
 }
