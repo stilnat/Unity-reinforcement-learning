@@ -139,7 +139,7 @@ public class SimpleBlackjack : MonoBehaviour
         }
         uniqueRewards[19] = 0;
 
-        MarkovDecisionProcess mdp = new MarkovDecisionProcess(systemDynamic, new Reward(uniqueRewards), 1);
+        MarkovDecisionProcess mdp = new MarkovDecisionProcess(systemDynamic, new RewardVector(uniqueRewards), 1);
 
         var res = mdp.FindOptimalPolicy(new float[systemDynamic.getStateNumber()]);
         Policy bestPolicy = res.Item1;

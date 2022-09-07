@@ -11,7 +11,7 @@ public static class PolicyEvaluation
     /// <param name="initialisation"></param>
     /// <returns>A float[] vector of the state values for the given policy.</returns>
 
-    public static float[] Evaluate(float[] valueInitialisation, SystemDynamic systemDynamic, Reward reward,
+    public static float[] Evaluate(float[] valueInitialisation, SystemDynamic systemDynamic, RewardVector reward,
         float discount, Policy policy, float nbIterations = 50, int verbose = 0)
     {
        float[] newStateValues = new float[valueInitialisation.Length];

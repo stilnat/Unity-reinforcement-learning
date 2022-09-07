@@ -4,10 +4,34 @@ using UnityEngine;
 
 public class MatrixND
 {
-    private float[] _array;
-    private int[] _dimensions;
+    protected float[] _array;
+    protected int[] _dimensions;
     // an array starting with 1 and containing dn, then dn*dn-1, then dn*...*d2
-    private int[] _dimensionsProduct;
+    protected int[] _dimensionsProduct;
+
+
+    public MatrixND(MatrixND matrix)
+    {
+        //TODO : check if all elements of dimensions are positive.
+        _dimensions = matrix._dimensions;
+        _dimensionsProduct = matrix._dimensionsProduct;
+        _array = new float[matrix._array.Length];
+        int i = 0;
+        foreach (float value in matrix._array)
+        {
+            _array[i] = matrix._array[i];
+            i ++;
+        }
+    }
+
+    // For vectors
+    public MatrixND(int dimension)
+    {
+        //TODO : check if all elements of dimensions are positive.
+        _dimensions = new int[1] { dimension };
+        InitializeDimensionsProduct(dimension);
+        InitializeArray(dimension);
+    }
 
     public MatrixND(params int[] dimensions)
     {
@@ -183,7 +207,7 @@ public class MatrixND
         return _dimensions[dimension];
     }
 
-    private void InitializeDimensionsProduct(params int[] dimensions)
+    protected void InitializeDimensionsProduct(params int[] dimensions)
     {
         _dimensionsProduct = new int[dimensions.Length];
         _dimensionsProduct[0] = 1;
@@ -193,7 +217,7 @@ public class MatrixND
         }
     }
 
-    private void InitializeArray(params int[] dimensions)
+    protected void InitializeArray(params int[] dimensions)
     {
         int allDimensionsProduct = 1;
         for (int i = 0; i < dimensions.Length; i++) // works

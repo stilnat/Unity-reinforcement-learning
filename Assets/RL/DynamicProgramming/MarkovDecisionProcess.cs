@@ -11,7 +11,7 @@ public class MarkovDecisionProcess
 {
     // TODO : Should these attributes be private ?
     public SystemDynamic _systemDynamic;
-    public Reward _reward;
+    public RewardVector _reward;
     public Policy _policy;
 
     private float _discount;
@@ -31,7 +31,7 @@ public class MarkovDecisionProcess
     /// <summary>
     /// Initialise the MDP with every elements defined by the user explicitly.
     /// </summary>
-    public MarkovDecisionProcess(SystemDynamic systemDynamic, Reward reward, Policy policy, float discount)
+    public MarkovDecisionProcess(SystemDynamic systemDynamic, RewardVector reward, Policy policy, float discount)
     {
         _systemDynamic = systemDynamic;
         _reward = reward;
@@ -42,7 +42,7 @@ public class MarkovDecisionProcess
     /// <summary>
     /// Initialise the MDP with a random policy. 
     /// </summary>
-    public MarkovDecisionProcess(SystemDynamic systemDynamic, Reward reward, float discount)
+    public MarkovDecisionProcess(SystemDynamic systemDynamic, RewardVector reward, float discount)
     {
         _systemDynamic = systemDynamic;
         _reward = reward;

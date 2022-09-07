@@ -14,7 +14,7 @@ public class TestPolicyEvaluation
         float[] rewardVector = new float[2];
         rewardVector[0] = -1;
         rewardVector[1] = 0;
-        Reward reward = new Reward(rewardVector);
+        RewardVector reward = new RewardVector(rewardVector);
 
         float[] valueInitialisation = new float[4];
         valueInitialisation[0] = 0;
@@ -57,7 +57,7 @@ public class TestPolicyEvaluation
         float[] rewardVector = new float[2];
         rewardVector[0] = -1;
         rewardVector[1] = 0;
-        Reward reward = new Reward(rewardVector);
+        RewardVector reward = new RewardVector(rewardVector);
 
         float[] valueInitialisation = new float[16];
         for (int i = 0; i < 16; i++)

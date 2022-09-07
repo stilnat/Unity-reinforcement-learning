@@ -15,7 +15,7 @@ public class PolicyIteration
     /// <param name="nbIterations">The number of iterations for the state value evaluation. </param>
     /// <param name="verbose">If verbose more than zero, debug.log some info.</param>
     /// <returns> An optimal deterministic policy for the given MDP, it's not necessarily the unique one. Returns as well as the optimal state-value.</returns>
-    public static (Policy, float[]) Iterate(float[] valueInitialisation, SystemDynamic systemDynamic, Reward reward,
+    public static (Policy, float[]) Iterate(float[] valueInitialisation, SystemDynamic systemDynamic, RewardVector reward,
     float discount, Policy policy, float nbIterations = 50, int verbose = 0)
     {
        
