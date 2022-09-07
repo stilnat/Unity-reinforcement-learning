@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class State : MatrixND
 {
-    public State(params float[] values) : base(values.Length)
+
+    private bool _isTerminal;
+
+    public State(bool terminalState = false,params float[] values) : base(values.Length)
     {
         int i = 0;
         foreach (float value in values)
@@ -12,6 +15,7 @@ public class State : MatrixND
             _array[i] = value;
             i++;
         }
+        _isTerminal = terminalState;
     }
 
     public State(float value) : base(1)
