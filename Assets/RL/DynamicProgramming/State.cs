@@ -6,10 +6,28 @@ public class State : MatrixND
 {
 
     private bool _isTerminal;
+    private string _name;
 
-    public State(bool terminalState = false,params float[] values) : base(values.Length)
+    public bool IsTerminal
+    {
+       get{ return _isTerminal; }
+    }
+
+    public State(bool terminalState = false, params float[] values) : base(values.Length)
     {
         int i = 0;
+        foreach (float value in values)
+        {
+            _array[i] = value;
+            i++;
+        }
+        _isTerminal = terminalState;
+    }
+
+    public State(string name, bool terminalState = false, params float[] values) : base(values.Length)
+    {
+        int i = 0;
+        _name = name;
         foreach (float value in values)
         {
             _array[i] = value;

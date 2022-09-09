@@ -136,11 +136,20 @@ public class SystemDynamic
 
 
     /// <summary>
-    /// Set a singular dynamic in the system
+    /// Set a singular dynamic in the system, the integer parameters are not values, they represent indexes of the position in the matrix for state, reward and action.
     /// </summary>
     public void SetDynamic(int sp, int r, int s, int a, float p)
     {
         _dynamicMatrix.Set(p,sp,r,s,a);
+        if (!VerifyDynamics(_dynamicMatrix))
+        {
+            throw new System.Exception("The dynamic matrix probabilities are not all summing up to 1");
+        }
+    }
+
+    public void SetDynamic(State sp, Reward r, State s, Action a, float p)
+    {
+        _dynamicMatrix.Set(p, _StateDictionary[sp], _RewardDictionary[r], _StateDictionary[s], _ActionDictionary[a]);
         if (!VerifyDynamics(_dynamicMatrix))
         {
             throw new System.Exception("The dynamic matrix probabilities are not all summing up to 1");
@@ -185,6 +194,7 @@ public class SystemDynamic
         }
         return true;
     }
+
 
     /// <summary>
     /// Initialise the dynamic matrix to any value
