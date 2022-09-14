@@ -4,9 +4,10 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "NewAssembly",
         "MonteCarloScripts",
-        "TemporalDifference"
+        "TemporalDifference",
+        "MarkovDecisionProcessScripts",
+        "MathHelperScripts"
     ],
     "includePlatforms": [
         "Editor"
