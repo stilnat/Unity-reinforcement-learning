@@ -78,8 +78,6 @@ public class Trajectory
         reward
     }
 
-
-
     public void AddReward(Reward r)
     {
         if (_lastAdded == LastAdded.action)
@@ -123,6 +121,24 @@ public class Trajectory
         else throw new System.Exception("the trajectory contains only " + _rewards.Count + "time steps.");
 
         return res;
+    }
+
+    public Dictionary<State, int> CountStatesCrossed()
+    {
+        Dictionary<State, int> statesAndCount = new Dictionary<State, int>();
+        foreach(State s in _states)
+        {
+            if (statesAndCount.ContainsKey(s))
+            {
+                statesAndCount[s] += 1;
+            }
+            else
+            {
+                statesAndCount.Add(s, 1);
+            }
+        }
+
+        return statesAndCount;
     }
 
 }
