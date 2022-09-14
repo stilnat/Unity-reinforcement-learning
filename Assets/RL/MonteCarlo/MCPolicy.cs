@@ -62,7 +62,7 @@ public class MCPolicy
         bool chosen = false;
         for (int i = 0; i < probabilities.Length; i++)
         {
-            if (probabilities[i] > randomNumber)
+            if (probabilities[i] >= randomNumber)
             {
                 return actionProbabilities[i].A;
             }

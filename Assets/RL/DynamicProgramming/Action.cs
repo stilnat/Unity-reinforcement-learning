@@ -17,6 +17,17 @@ public class Action : MatrixND
         }
     }
 
+    public Action(string name, params float[] values) : base(values.Length)
+    {
+        int i = 0;
+        foreach (float value in values)
+        {
+            _array[i] = value;
+            i++;
+        }
+        _name = name;
+    }
+
 
 
 

@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "NewAssembly",
-        "MonteCarloScripts"
+        "MonteCarloScripts",
+        "TemporalDifference"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,0 +1,17 @@
+{
+    "name": "TemporalDifference",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d7784594f497af54dbf30c6bcd124b0f",
+        "GUID:6c1f11bee60d0b94085e2007d2af4a39"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

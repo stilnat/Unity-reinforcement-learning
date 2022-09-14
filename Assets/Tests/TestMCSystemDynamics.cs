@@ -2,24 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NUnit.Framework;
-
-public class TestMCPolicyEvaluation
+public class TestMCSystemDynamics
 {
     [Test]
-    public void TestSingleTerminalState()
+    public void TestEvaluationTD0OnSimpleDynamics()
     {
-        //to implement
-    }
-
-    // simple dynamics, choosing an action randomly.
-    [Test]
-    public void TestEvaluationOnSimpleDynamics()
-    {
-        State a = new State("a",false, 0);
-        State b = new State("b",false, 1);
-        State c = new State("c",false, 2);
-        State d = new State("d",false, 3);
-        State e = new State("e",true, 4);
+        State a = new State("a", false, 0);
+        State b = new State("b", false, 1);
+        State c = new State("c", false, 2);
+        State d = new State("d", false, 3);
+        State e = new State("e", true, 4);
 
         Reward ac = new Reward(2);
         Reward cd = new Reward(-10);
@@ -29,11 +21,11 @@ public class TestMCPolicyEvaluation
         Reward ab2 = new Reward(-1);
         Reward ba = new Reward(1);
 
-        Action AToC = new Action(0);
-        Action AToBOrD = new Action(1);
-        Action CToD = new Action(2);
-        Action DToE = new Action(3);
-        Action BToA = new Action(4);
+        Action AToC = new Action("AToC", 0);
+        Action AToBOrD = new Action("AToBOrD", 1);
+        Action CToD = new Action("CToD", 2);
+        Action DToE = new Action("DToE", 3);
+        Action BToA = new Action("BToA", 4);
 
         MCSystemDynamic systemDynamic = new MCSystemDynamic();
         systemDynamic.AddDynamic(new MCSystemDynamic.SingleActionStateDynamic(a, AToC, ac, c, 1));
@@ -47,12 +39,6 @@ public class TestMCPolicyEvaluation
         systemDynamic.AddDynamic(new MCSystemDynamic.SingleActionStateDynamic(b, BToA, ba, a, 1));
 
         List<State> states = systemDynamic.getAllStates();
-
-        Dictionary<State, float> initialisation = new Dictionary<State, float>();
-        foreach(State state in states)
-        {
-            initialisation.Add(state, 0);
-        }
 
         MCPolicy policy = new MCPolicy();
         foreach (State state in states)
@@ -69,16 +55,16 @@ public class TestMCPolicyEvaluation
                 }
                 policy.AddPolicyForState(state, actionProbabilities);
             }
-         
+        }
+
+        for(int i =0; i < 100000; i++)
+        {
+           systemDynamic.GenerateTrajectory(a, policy);
+
         }
 
 
 
-         var res = MCPolicyEvaluation.FirstVisitMCEvaluate(initialisation, a, systemDynamic, policy, 1, 50000, 0);
-         Debug.Log("end of test");
-
-
     }
-
 
 }

@@ -46,6 +46,15 @@ public class Trajectory
 
     }
 
+    public State GetPreviousState(int step)
+    {
+        if (_currentStateCounter - step >=0)
+        {
+            return _states[_currentStateCounter - step];
+        }
+        else throw new System.Exception("you tried to go " + step + " steps back but the trajectory current state is state number " + _currentStateCounter);
+    }
+
     public Trajectory(State initialState)
     {
         _lastAdded = LastAdded.reward;

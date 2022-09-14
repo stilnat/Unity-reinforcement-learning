@@ -45,19 +45,21 @@ public class MCSystemDynamic
     }
 
     private Dictionary<StateAction, List<StateRewardProbability>> _stateActionDic;
-    private Dictionary<State, List<Action>> _directActionDic;
+    private Dictionary<State, HashSet<Action>> _directActionDic;
+    private List<State> _finalStates;
 
     public MCSystemDynamic()
     {
         _stateActionDic = new Dictionary<StateAction, List<StateRewardProbability>>();
-        _directActionDic = new Dictionary<State, List<Action>>();
+        _directActionDic = new Dictionary<State, HashSet<Action>>();
+        _finalStates = new List<State>();
     }
 
-    public State[] getAllStates()
+    public List<State>  getAllStates()
     {
-        State[] array = new State[_directActionDic.Count];
-        _directActionDic.Keys.CopyTo(array, 0);
-        return array;
+        List<State> allStates = new List<State>(_directActionDic.Keys);
+        allStates.AddRange(_finalStates);
+        return allStates;
     }
 
     public int StateCount()
@@ -86,11 +88,15 @@ public class MCSystemDynamic
         }
         else
         {
-            _directActionDic.Add(single.S, new List<Action>());
+            _directActionDic.Add(single.S, new HashSet<Action>());
             _directActionDic[single.S].Add(single.A);
         }
 
-        
+        // Should be fine as long as the dynamics don't contain too much terminal states.
+        if (single.SP.IsTerminal && !_finalStates.Contains(single.SP))
+        {
+            _finalStates.Add(single.SP);
+        }       
     }
 
     /// <summary>
@@ -117,7 +123,7 @@ public class MCSystemDynamic
         bool chosen = false ;
         for (int i = 0; i < probabilities.Length; i++)
         {
-            if(probabilities[i] > randomNumber)
+            if(probabilities[i] >= randomNumber)
             {
                 return (srps[i].S, srps[i].R);
             }
@@ -132,8 +138,12 @@ public class MCSystemDynamic
         return (srps[0].S, srps[0].R);
     }
 
-    public List<Action> GetActionsForState(State s)
+    public HashSet<Action> GetActionsForState(State s)
     {
+        if (s.IsTerminal)
+        {
+            throw new System.Exception("state is terminal, there is no actions for a terminal state");
+        }
         return _directActionDic[s];
     }
 
