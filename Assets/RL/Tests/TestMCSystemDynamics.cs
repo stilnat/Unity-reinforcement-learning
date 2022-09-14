@@ -13,7 +13,7 @@ public class TestMCSystemDynamics
         Reward r = new Reward(0);
         try
         {
-            systemDynamic.AddDynamic(new MCSystemDynamic.SingleActionStateDynamic(s, a, r, s, 1));
+            systemDynamic.AddDynamic(new SingleActionStateDynamic(s, a, r, s, 1));
             Assert.IsTrue(false, "Impossible to define a terminal state with actions"); // only executed if no exceptions caught ...
         } catch(SystemDynamicsException e)
         {
