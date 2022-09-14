@@ -106,23 +106,33 @@ public class Trajectory
         else throw new System.Exception("An action can only be added after a state");
     }
 
-    public float ReturnAtTimeStep(int i, float gamma)
+    /// <summary>
+    /// Compute the total return from time step i of the trajectory.
+    /// </summary>
+    /// <param name="i">The time step.</param>
+    /// <param name="discount"> The discount to apply at each step.</param>
+    /// <returns></returns>
+    public float ReturnAtTimeStep(int i, float discount)
     {
         float res = 0;
-        float gam = 1;
+        float totalDiscount = 1;
         if (i < _rewards.Count)
         {
             for(int j = i; j < _rewards.Count; j++)
             {
-                res += gam * _rewards[j].Value;
-                gam = gam * gamma;
-            }
+                res += totalDiscount * _rewards[j].Value;
+                totalDiscount = totalDiscount * discount;
+        }
         }
         else throw new System.Exception("the trajectory contains only " + _rewards.Count + "time steps.");
 
         return res;
     }
 
+    /// <summary>
+    /// Counts in a single trajectory how many times each state was crossed.
+    /// </summary>
+    /// <returns>A Dictionary containing states as key and the time each state was crossed as value</returns>
     public Dictionary<State, int> CountStatesCrossed()
     {
         Dictionary<State, int> statesAndCount = new Dictionary<State, int>();
