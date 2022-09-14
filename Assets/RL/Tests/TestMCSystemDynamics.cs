@@ -5,6 +5,34 @@ using NUnit.Framework;
 public class TestMCSystemDynamics
 {
     [Test]
+    public void TestTerminalStateWithDynamics()
+    {
+        MCSystemDynamic systemDynamic = new MCSystemDynamic();
+        State s = new State(true, 0);
+        Action a= new Action(0);
+        Reward r = new Reward(0);
+        try
+        {
+            systemDynamic.AddDynamic(new MCSystemDynamic.SingleActionStateDynamic(s, a, r, s, 1));
+            Assert.IsTrue(false, "Impossible to define a terminal state with actions"); // only executed if no exceptions caught ...
+        } catch(SystemDynamicsException e)
+        {
+            if (e.TerminalStateHasActions)
+            {
+                Assert.IsTrue(true);
+            }
+            else
+            {
+                Assert.IsTrue(false, "Impossible to define a terminal state with actions");
+            }
+        }
+
+        
+        
+    }
+
+
+    [Test]
     public void TestGenerateTrajectory()
     {
         //The test is correct(debug testing), there's really an issue with the way trajectory are generated.

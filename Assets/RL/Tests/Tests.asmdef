@@ -7,7 +7,8 @@
         "MonteCarloScripts",
         "TemporalDifference",
         "MarkovDecisionProcessScripts",
-        "MathHelperScripts"
+        "MathHelperScripts",
+        "CustomExceptionsScript"
     ],
     "includePlatforms": [
         "Editor"
