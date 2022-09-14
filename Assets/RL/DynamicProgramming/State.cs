@@ -13,6 +13,11 @@ public class State : MatrixND
        get{ return _isTerminal; }
     }
 
+    public string Name
+    {
+        get { return _name; }
+    }
+
     public State(bool terminalState = false, params float[] values) : base(values.Length)
     {
         int i = 0;

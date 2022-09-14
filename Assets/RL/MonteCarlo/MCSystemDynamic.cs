@@ -175,6 +175,27 @@ public class MCSystemDynamic
 
     }
 
+    public MCPolicy GenerateRandomPolicy()
+    {
+        MCPolicy policy = new MCPolicy();
+        foreach (State state in getAllStates())
+        {
+            if (!state.IsTerminal)
+            {
+                HashSet<Action> actions = GetActionsForState(state);
+                List<ActionProbability> actionProbabilities = new List<ActionProbability>();
+                float nbActions = actions.Count;
+                foreach (Action action in actions)
+                {
+                    ActionProbability actionProbability = new ActionProbability(action, 1f / nbActions);
+                    actionProbabilities.Add(actionProbability);
+                }
+                policy.AddPolicyForState(state, actionProbabilities);
+            }
+        }
+        return policy;
+    }
+
     private  void verifyDynamics()
     {
 
