@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class MCSystemDynamic
 {
 
@@ -108,34 +107,8 @@ public class MCSystemDynamic
     public (State, Reward) NextStateAndReward(State s, Action a)
     {
         List<StateRewardProbability> srps = _stateActionDic[new StateAction(s, a)];
-        float[] probabilities = new float[srps.Count];
-
-        // choose randomly with weight a state and a reward given a state and an action
-        probabilities[0] = srps[0].P;
-        float totalWeight = srps[0].P; 
-        for (int i = 1; i < srps.Count; i++)
-        {
-            probabilities[i] = probabilities[i - 1] + srps[i].P;
-            totalWeight += srps[i].P;
-        }
-
-        float randomNumber = Random.Range(0, totalWeight);
-        bool chosen = false ;
-        for (int i = 0; i < probabilities.Length; i++)
-        {
-            if(probabilities[i] >= randomNumber)
-            {
-                return (srps[i].S, srps[i].R);
-            }
-        }
-
-        if (!chosen)
-        {
-            throw new System.Exception("no state and reward were chosen");
-        }
-
-        // return random stuff 
-        return (srps[0].S, srps[0].R);
+        StateRewardProbability chosen =  srps.RandomElementByWeight(x => x.P);
+        return (chosen.S, chosen.R);
     }
 
     public HashSet<Action> GetActionsForState(State s)
@@ -161,6 +134,10 @@ public class MCSystemDynamic
         Action chosenAction;
         while (!currentState.IsTerminal)
         {
+            if(trajectory._states.Count > 100)
+            {
+                Debug.Log("check debug");
+            }
             trajectory.AddState(currentState);
             chosenAction = policy.ChooseAction(currentState);
             var res =  NextStateAndReward(currentState, chosenAction);
