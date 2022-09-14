@@ -2,8 +2,12 @@
 
 using System;
 
+/// <summary>
+/// Exception to use when something is wrong with the system dynamics.
+/// </summary>
 public class SystemDynamicsException : Exception
 {
+    // If a terminal state in the dynamics has actions, it's an issue.
     private bool _terminalStateHasActions;
     public bool TerminalStateHasActions
     {
