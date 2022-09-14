@@ -2,7 +2,8 @@
     "name": "MarkovDecisionProcessScripts",
     "rootNamespace": "",
     "references": [
-        "GUID:e8dd3788ee0d42f48815a1951cdaf6a3"
+        "GUID:e8dd3788ee0d42f48815a1951cdaf6a3",
+        "GUID:72f35f4d9ed944e4e9d907dca0f4c9e6"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

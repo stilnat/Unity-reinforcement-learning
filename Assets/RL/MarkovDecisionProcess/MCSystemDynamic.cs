@@ -68,6 +68,11 @@ public class MCSystemDynamic
 
     public void AddDynamic(SingleActionStateDynamic single)
     {
+
+        if (single.S.IsTerminal)
+        {
+            throw new SystemDynamicsException("can't add a new dynamic from a terminal state", true);
+        }
  
         var srp = new StateRewardProbability(single.SP, single.R, single.P);
         var sa = new StateAction(single.S, single.A);
