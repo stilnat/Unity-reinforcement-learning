@@ -126,7 +126,6 @@ public class MCSystemDynamic
 
         if (initialState.IsTerminal)
         {
-            trajectory.AddState(initialState);
             return trajectory;
         }
 
@@ -134,15 +133,13 @@ public class MCSystemDynamic
         Action chosenAction;
         while (!currentState.IsTerminal)
         {
-            trajectory.AddState(currentState);
             chosenAction = policy.ChooseAction(currentState);
             var res =  NextStateAndReward(currentState, chosenAction);
             currentState = res.Item1;
             trajectory.AddAction(chosenAction);
             trajectory.AddReward(res.Item2);
+            trajectory.AddState(currentState);
         }
-
-        trajectory.AddState(currentState);
 
         return trajectory;
 
