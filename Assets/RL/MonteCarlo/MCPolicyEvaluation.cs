@@ -24,7 +24,7 @@ public static class MCPolicyEvaluation
     public static Dictionary<State, MCStatevalue> FirstVisitMCEvaluate(Dictionary<State, float> initialStateValues, State initialState, MCSystemDynamic systemDynamic,
         MCPolicy policy, float discount, float nbIterations = 50, int verbose = 0)
     {
-
+        //TODO does not include the final states value ?
         Dictionary<State, MCStatevalue> _stateValueDictionary = new Dictionary<State, MCStatevalue>() ;
 
 

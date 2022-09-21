@@ -22,7 +22,6 @@ public class TD0PolicyEvaluation
 
         Dictionary<State, TDStatevalue> _stateValueDictionary = new Dictionary<State, TDStatevalue>();
 
-        // does not return the last state ? state e is not in the dictionary.
         foreach(State s in systemDynamic.getAllStates())
         {
             TDStatevalue statevalue = new TDStatevalue(initialStateValues[s], 0);

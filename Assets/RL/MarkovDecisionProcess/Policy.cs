@@ -31,7 +31,7 @@ public class Policy
     }
 
     /// <summary>
-    /// Set a single probability pi(a|s).
+    /// Set a single probability, action knowing state is s pi(a|s).
     /// </summary>
     /// <param name="state"> The identifier of the state. </param>
     /// <param name="action"> The identifier of the action. </param>
