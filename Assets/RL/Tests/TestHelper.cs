@@ -4,6 +4,53 @@ using UnityEngine;
 
 public static class TestHelper
 {
+    /// <summary>
+    /// n must be odd.
+    /// </summary>
+    /// <param name="n"></param>
+    /// <returns></returns>
+    public static MCSystemDynamic GenerateRandomWalk(int n)
+    {
+        if(n%2 == 0)
+        {
+             throw new System.ArgumentException(System.String.Format("{0} is not an odd number", n),"n");
+        }
+
+        if (n < 3)
+        {
+            throw new System.ArgumentException(System.String.Format("{0} is too small, not enough states", n), "n");
+        }
+
+        List<State> states = new List<State>();
+        states.Add(new State(0.ToString(), true, 0));
+        for(int i = 1; i<n-1; i++)
+        {
+            states.Add(new State(i.ToString(), false, i));
+        }
+        states.Add(new State((n-1).ToString(), true, n-1));
+
+        Reward reward = new Reward(-1);
+
+        Action left = new Action("left",0);
+        Action right = new Action("right",1);
+
+        MCSystemDynamic systemDynamic = new MCSystemDynamic();
+
+        foreach(State state in states)
+        {
+            if (!state.IsTerminal)
+            {
+                systemDynamic.AddDynamic(new SingleActionStateDynamic(state, right, reward, states[states.IndexOf(state) + 1], 1));
+                systemDynamic.AddDynamic(new SingleActionStateDynamic(state, left, reward, states[states.IndexOf(state) - 1], 1));
+            }
+            
+        }
+
+        return systemDynamic;
+
+
+
+    }
     public static MCSystemDynamic GenerateSimpleDynamicWithLoop()
     {
         State a = new State("a", false, 0);
