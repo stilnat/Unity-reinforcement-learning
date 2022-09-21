@@ -13,6 +13,11 @@ public class Trajectory
     private State _currentState;
     private LastAdded _lastAdded;
 
+    public List<State> States
+    {
+        get { return  _states; }
+    }
+
     public int CurrentStateCounter
     {
         get { return _currentStateCounter; }
@@ -57,12 +62,13 @@ public class Trajectory
 
     public Trajectory(State initialState)
     {
-        _lastAdded = LastAdded.reward;
+        _lastAdded = LastAdded.state;
         _states = new List<State>();
         _rewards = new List<Reward>();
         _actions = new List<Action>();
         _currentStateCounter = 0;
         _currentState = initialState;
+        _states.Add(initialState);
         
     }
 
