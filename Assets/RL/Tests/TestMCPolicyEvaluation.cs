@@ -6,6 +6,28 @@ using NUnit.Framework;
 public class TestMCPolicyEvaluation
 {
 
+    [Test]
+    public void TestEvaluationMCOnRandomWalk()
+    {
+        int n = 11;
+        MCSystemDynamic systemDynamic = TestHelper.GenerateRandomWalk(n);
+
+        List<State> states = systemDynamic.getAllStates();
+
+        Dictionary<State, float> initialisation = new Dictionary<State, float>();
+        foreach (State state in states)
+        {
+            initialisation.Add(state, 0);
+        }
+
+        MCPolicy policy = systemDynamic.GenerateRandomPolicy();
+        State initialState = states.Find(x => x.Name == (n / 2).ToString());
+
+        var res = MCPolicyEvaluation.FirstVisitMCEvaluate(initialisation, initialState, systemDynamic, policy, 1, 100000);
+
+
+    }
+
     // simple dynamics, choosing an action randomly.
     [Test]
     public void TestEvaluationOnSimpleDynamics()
