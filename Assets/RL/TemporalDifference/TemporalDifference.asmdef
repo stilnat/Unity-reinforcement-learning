@@ -2,7 +2,8 @@
     "name": "TemporalDifference",
     "rootNamespace": "",
     "references": [
-        "GUID:3428e624883adbb4abde040af1baef03"
+        "GUID:3428e624883adbb4abde040af1baef03",
+        "GUID:e8dd3788ee0d42f48815a1951cdaf6a3"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
