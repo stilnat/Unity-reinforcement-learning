@@ -4,6 +4,19 @@ using System;
 public class SarsaLambda
 {
 
+    /// <summary>
+    /// Evaluate the state actions values of the system, using the SARSA Lambda algorithm. Also compute the optimal epsilon-greedy policy.
+    /// </summary>
+    /// <param name="initialStateActionValues">The initial values of each state-action of the system.</param>
+    /// <param name="initialState"> The state to begin from.</param>
+    /// <param name="systemDynamic">The dynamic of the system.</param>
+    /// <param name="policy">The policy to follow.</param>
+    /// <param name="discount"></param>
+    /// <param name="eligibilityDecay"> The decay parameter of the eligibility trace, must be between 0 and 1.</param>
+    /// <param name="learningRate">The learning rate, must be between 0 and 1.</param>
+    /// <param name="epsilon"> The probability of choosing randomly an action.</param>
+    /// <param name="nbIterations">The number of episodes to run.</param>
+    /// <returns>The optimal policy found, and the state action values.</returns>
     public static (MCPolicy,Dictionary<State, Dictionary<Action, StateActionValue>>) SarsaLambdaEvaluate(Dictionary<StateAction, float> initialStateActionValues, State initialState, MCSystemDynamic systemDynamic,
        MCPolicy policy, float discount, float eligibilityDecay, float learningRate, float epsilon, float nbIterations = 50)
     {
@@ -26,6 +39,7 @@ public class SarsaLambda
                 var res = systemDynamic.NextStateAndReward(currentState, currentAction);
                 State nextState = res.Item1;
                 Reward currentReward = res.Item2;
+                trajectory.AddStep(currentAction, currentReward, nextState);
                 if (nextState.IsTerminal) { break; }
                 nextAction = policy.ChooseActionEpsilonGreedy(nextState, actionStateValueDictionary[nextState], epsilon);
 
@@ -35,7 +49,7 @@ public class SarsaLambda
 
                 UpdateStateActionValues(trajectory, learningRate, TDError, actionStateValueDictionary);
 
-                trajectory.AddStep(currentAction, currentReward, nextState);
+                
                 trajectory.NextStep();
                 currentState = nextState;
             }
@@ -47,6 +61,9 @@ public class SarsaLambda
         return (policy, actionStateValueDictionary);
     }
 
+    /// <summary>
+    /// Initialise the dictionary containing state-action values.
+    /// </summary>
     private static Dictionary<State, Dictionary<Action, StateActionValue>> Initialise(MCSystemDynamic systemDynamic, Dictionary<StateAction, float> initialStateActionValues)
     {
         var actionStateValueDictionary = new Dictionary<State, Dictionary<Action, StateActionValue>>();
@@ -65,6 +82,9 @@ public class SarsaLambda
         return actionStateValueDictionary;
     }
 
+    /// <summary>
+    /// Compute The TD target of Sarsa Lambda.
+    /// </summary>
     private static float ComputeTDError(Reward currentReward, State currentState, Action currentAction, State nextState, Action nextAction, float discount,
          Dictionary<State, Dictionary<Action, StateActionValue>> actionStateValueDictionary)
     {
@@ -72,6 +92,9 @@ public class SarsaLambda
                - actionStateValueDictionary[currentState][currentAction]._stateActionValue;
     }
 
+    /// <summary>
+    /// Update the eligibility trace of all state actions encountered in the current trajectory.
+    /// </summary>
     private static void SetEligibilityTrace(State currentState, Action currentAction, Trajectory trajectory, float discount, float eligibilityDecay,
         Dictionary<State, Dictionary<Action, StateActionValue>> actionStateValueDictionary)
     {
@@ -80,31 +103,47 @@ public class SarsaLambda
         int i = 0;
         foreach (State stateEncountered in trajectory.States) //setting eligibility traces
         {
-            actionStateValueDictionary[stateEncountered][trajectory.GetActionForStateNumber(i)]._eligibilityTrace *= discount * eligibilityDecay;
-            i = i + 1;
+            if(trajectory.States[trajectory.States.Count-1] != stateEncountered)
+            {
+                actionStateValueDictionary[stateEncountered][trajectory.GetActionForStateNumber(i)]._eligibilityTrace *= discount * eligibilityDecay;
+                i = i + 1;
+            }
+
         }
     }
 
+    /// <summary>
+    /// Update the state-action value of each state-action encountered in the current trajectory.
+    /// </summary>
     private static void UpdateStateActionValues(Trajectory trajectory, float learningRate, float TDError,
         Dictionary<State, Dictionary<Action, StateActionValue>> actionStateValueDictionary)
     {
         int i = 0;
         foreach (State stateEncountered in trajectory.States)
         {
-            actionStateValueDictionary[stateEncountered][ trajectory.GetActionForStateNumber(i)]._stateActionValue +=
+            if (trajectory.States[trajectory.States.Count - 1] != stateEncountered)
+            {
+                actionStateValueDictionary[stateEncountered][ trajectory.GetActionForStateNumber(i)]._stateActionValue +=
                 learningRate * TDError * actionStateValueDictionary[stateEncountered][trajectory.GetActionForStateNumber(i)]._eligibilityTrace;
             i = i + 1;
+            }
         }
     }
 
+    /// <summary>
+    /// Set the eligibility trace of all state-action of the trajectory to zero.
+    /// </summary>
     private static void ResetEligibilityTrace(Trajectory trajectory, Dictionary<State, Dictionary<Action, StateActionValue>> actionStateValueDictionary)
     {
 
         int i = 0;
         foreach (State stateEncountered in trajectory.States) //setting elgibility traces
         {
-            actionStateValueDictionary[stateEncountered][trajectory.GetActionForStateNumber(i)]._eligibilityTrace = 0;
-            i = i + 1;
+            if (trajectory.States[trajectory.States.Count - 1] != stateEncountered)
+            {
+                actionStateValueDictionary[stateEncountered][trajectory.GetActionForStateNumber(i)]._eligibilityTrace = 0;
+                i = i + 1;
+            }
         }
     }
 
