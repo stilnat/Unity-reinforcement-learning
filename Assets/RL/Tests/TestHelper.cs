@@ -5,9 +5,10 @@ using UnityEngine;
 public static class TestHelper
 {
     /// <summary>
-    /// n must be odd.
+    /// n must be odd. This method generates a linear environment, where each state is connected in a chain, excepted for the two terminal states at each end.
+    /// Moving anywhere gives a reward of -1. The goal can then be to get to a terminal state ASAP.
     /// </summary>
-    /// <param name="n"></param>
+    /// <param name="n"> The number of states. </param>
     /// <returns></returns>
     public static MCSystemDynamic GenerateRandomWalk(int n)
     {
