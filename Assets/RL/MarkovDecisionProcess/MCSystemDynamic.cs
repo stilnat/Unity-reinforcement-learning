@@ -106,14 +106,6 @@ public class MCSystemDynamic
     public (State, Reward) NextStateAndReward(State s, Action a)
     {
         StateAction stateAction = new StateAction(s, a);
- 
-        foreach (StateAction sa in _stateActionDic.Keys)
-        {
-            if(sa.Equals(stateAction))
-            {
-                Debug.Log("key contained");
-            }
-        }
 
         if (_stateActionDic.ContainsKey(stateAction))
         {
