@@ -51,4 +51,17 @@ public class State : MatrixND
 
     }
 
+    public override string ToString()
+    {
+        if (_name == null)
+        {
+            return base.ToString();
+        }
+        else
+        {
+            return _name;
+        }
+
+    }
+
 }

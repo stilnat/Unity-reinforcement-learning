@@ -10,6 +10,8 @@ public class Action : MatrixND
     
     private string _name;
 
+    public string Name { get { return _name; } }
+
     public Action(params float[] values) : base(values.Length)
     {
         int i = 0;
@@ -29,6 +31,19 @@ public class Action : MatrixND
             i++;
         }
         _name = name;
+    }
+
+    public override string ToString()
+    {
+        if(_name == null)
+        {
+            return base.ToString();
+        }
+        else
+        {
+            return _name;
+        }
+        
     }
 
     //TODO : adds equality overloading to compare name too, not just MatrixND.
