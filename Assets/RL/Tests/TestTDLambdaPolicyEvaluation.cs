@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 public class TestTDLambdaPolicyEvaluation
 {
-
+    
     [Test]
     public void TestEvaluationTDLambdaOnRandomWalk()
     {
@@ -23,8 +23,7 @@ public class TestTDLambdaPolicyEvaluation
         MCPolicy policy = systemDynamic.GenerateRandomPolicy();
         State initialState = states.Find(x => x.Name == (n / 2).ToString());
 
-        var res = TDLambdaPolicyEvaluation.TDLambdaEvaluate(initialisation, initialState, systemDynamic, policy, 1f, 0.9f, 0.005f, 100000);
-
+        var res = TDLambdaPolicyEvaluation.TDLambdaEvaluate(initialisation, initialState, systemDynamic, policy, 1f, 0.9f, 0.005f, 20000);
 
     }
 

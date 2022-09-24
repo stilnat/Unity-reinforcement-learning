@@ -23,7 +23,7 @@ public class TestMCPolicyEvaluation
         MCPolicy policy = systemDynamic.GenerateRandomPolicy();
         State initialState = states.Find(x => x.Name == (n / 2).ToString());
 
-        var res = MCPolicyEvaluation.FirstVisitMCEvaluate(initialisation, initialState, systemDynamic, policy, 1, 100000);
+        var res = MCPolicyEvaluation.FirstVisitMCEvaluate(initialisation, initialState, systemDynamic, policy, 1, 10000);
 
 
     }
