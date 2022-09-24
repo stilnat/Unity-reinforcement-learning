@@ -33,6 +33,11 @@ public class Trajectory
         _currentState = _states[0];
     }
 
+    public Action GetActionForStateNumber(int number)
+    {
+        return _actions[number];
+    }
+
     public (Action, Reward, State) NextStep()
     {
         int i = _currentStateCounter;
@@ -110,6 +115,13 @@ public class Trajectory
             _lastAdded = LastAdded.action;
         }
         else throw new System.Exception("An action can only be added after a state");
+    }
+
+    public void AddStep(Action a, Reward r, State s)
+    {
+        AddAction(a);
+        AddReward(r);
+        AddState(s);
     }
 
     /// <summary>

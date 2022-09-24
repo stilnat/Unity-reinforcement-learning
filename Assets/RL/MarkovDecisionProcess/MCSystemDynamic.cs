@@ -41,6 +41,12 @@ public class MCSystemDynamic
         return allStates;
     }
 
+    public List<StateAction> getAllStatesActions()
+    {
+        List<StateAction> allStatesActions = new List<StateAction>(_stateActionDic.Keys);
+        return allStatesActions;
+    }
+
     /// <summary>
     /// Count how many states are in this system.
     /// </summary>
@@ -99,9 +105,25 @@ public class MCSystemDynamic
     /// <returns> The reward from taking action a in state s, and the state the system end up in</returns>
     public (State, Reward) NextStateAndReward(State s, Action a)
     {
-        List<StateRewardProbability> srps = _stateActionDic[new StateAction(s, a)];
-        StateRewardProbability chosen =  srps.RandomElementByWeight(x => x.P);
-        return (chosen.S, chosen.R);
+        StateAction stateAction = new StateAction(s, a);
+ 
+        foreach (StateAction sa in _stateActionDic.Keys)
+        {
+            if(sa.Equals(stateAction))
+            {
+                Debug.Log("key contained");
+            }
+        }
+
+        if (_stateActionDic.ContainsKey(stateAction))
+        {
+            List<StateRewardProbability> srps = _stateActionDic[stateAction];
+
+            StateRewardProbability chosen = srps.RandomElementByWeight(x => x.P);
+            return (chosen.S, chosen.R);
+        }
+        else throw new SystemDynamicsException();
+
     }
 
     /// <summary>

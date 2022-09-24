@@ -22,7 +22,7 @@ public class TestTD0PolicyEvaluation
 
         MCPolicy policy = systemDynamic.GenerateRandomPolicy();
 
-        var res = TD0PolicyEvaluation.TD0Evaluate(initialisation, stateA, systemDynamic, policy, 1, 0.005f, 200000);
+        var res = TD0PolicyEvaluation.TD0Evaluate(initialisation, stateA, systemDynamic, policy, 1, 0.005f, 20000);
         Assert.IsTrue(res[stateA]._stateValue <= -8.5 && res[stateA]._stateValue >= -8.8, "state 'a' value is precisely -8.6, the result should be between -8.5 and -8.8. " +
            "value found is " + res[stateA]._stateValue);
         Assert.IsTrue(res[stateB]._stateValue <= -7.5 && res[stateB]._stateValue >= -7.8, "state 'b' value is precisely -7.6, the result should be between -7.5 and -7.8. " +

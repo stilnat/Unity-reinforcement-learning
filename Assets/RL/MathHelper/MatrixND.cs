@@ -8,6 +8,8 @@ public class MatrixND
     protected int[] _dimensions;
     // an array starting with 1 and containing dn, then dn*dn-1, then dn*...*d2
     protected int[] _dimensionsProduct;
+    private int _hashcode;
+    private bool _hasHashCode;
 
 
     public MatrixND(MatrixND matrix)
@@ -22,6 +24,7 @@ public class MatrixND
             _array[i] = matrix._array[i];
             i ++;
         }
+        _hasHashCode = false;
     }
 
     // For vectors
@@ -31,6 +34,7 @@ public class MatrixND
         _dimensions = new int[1] { dimension };
         InitializeDimensionsProduct(dimension);
         InitializeArray(dimension);
+        _hasHashCode = false;
     }
 
     public MatrixND(params int[] dimensions)
@@ -39,6 +43,7 @@ public class MatrixND
         _dimensions = dimensions;
         InitializeDimensionsProduct(dimensions);
         InitializeArray(dimensions);
+        _hasHashCode = false;
     }
 
     public MatrixND(float[,] array)
@@ -55,6 +60,7 @@ public class MatrixND
                 Set(array[i, j], i, j);
             }
         }
+        _hasHashCode = false;
     }
 
     public MatrixND(float[,,,] array)
@@ -77,6 +83,7 @@ public class MatrixND
                 }
             }
         }
+        _hasHashCode = false;
     }
 
     public float Get(params int[] indexes)
@@ -202,6 +209,30 @@ public class MatrixND
         return true;
     }
 
+    public override int GetHashCode()
+    {
+        if (_hasHashCode) { return _hashcode; }
+        float hashcode = 0;
+        for(int i = 0; i < _array.Length; i++)
+        {
+            hashcode += _array[i];
+        }
+        for (int i = 0; i < _array.Length; i++)
+        {
+            hashcode += _array[i];
+        }
+
+        if (hashcode > 0 && hashcode < 1) { hashcode += 1; }
+        if (hashcode < 0 && hashcode > -1) 
+        {
+            hashcode -= 1;
+        }
+        _hashcode = (int)(hashcode *= 32767);
+        _hasHashCode = true;
+        return _hashcode;
+
+    }
+
     public int GetLength(int dimension)
     {
         return _dimensions[dimension];
@@ -227,5 +258,7 @@ public class MatrixND
 
         _array = new float[allDimensionsProduct];
     }
+
+    
 
 }

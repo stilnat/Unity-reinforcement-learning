@@ -4,30 +4,17 @@ using UnityEngine;
 
 public class TDLambdaPolicyEvaluation
 {
-    public class TDLambdaStatevalue
-    {
-        public TDLambdaStatevalue(float stateValue, int numberOfVisit)
-        {
-            _stateValue = stateValue;
-            _numberOfVisit = numberOfVisit;
-            _eligibilityTrace = 0;
-        }
-
-        public float _eligibilityTrace;
-        public float _stateValue;
-        public int _numberOfVisit;
-    }
-    public static Dictionary<State, TDLambdaStatevalue> TDLambdaEvaluate(Dictionary<State, float> initialStateValues, State initialState, MCSystemDynamic systemDynamic,
+    public static Dictionary<State, StateValue> TDLambdaEvaluate(Dictionary<State, float> initialStateValues, State initialState, MCSystemDynamic systemDynamic,
        MCPolicy policy, float discount, float eligibilityDecay, float learningRate, float nbIterations = 50)
     {
 
 
-        Dictionary<State, TDLambdaStatevalue> _stateValueDictionary = new Dictionary<State, TDLambdaStatevalue>();
+        Dictionary<State, StateValue> _stateValueDictionary = new Dictionary<State, StateValue>();
 
 
         foreach (State s in systemDynamic.getAllStates())
         {
-            TDLambdaStatevalue statevalue = new TDLambdaStatevalue(initialStateValues[s], 0);
+            StateValue statevalue = new StateValue(initialStateValues[s], 0);
             _stateValueDictionary.Add(s, statevalue);
         }
 
