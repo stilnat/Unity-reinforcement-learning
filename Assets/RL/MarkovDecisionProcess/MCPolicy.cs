@@ -105,7 +105,7 @@ public class MCPolicy
     }
 
     /// <summary>
-    /// Choose an action in state s according to the highest state-action value.
+    /// Choose an action in state s according to the highest state-action value. This method modify this policy.
     /// </summary>
     /// <param name="s">The state the agent is in. </param>
     /// <param name="stateActionValues"> All available actions in state s, and their respective values.</param>
@@ -292,6 +292,9 @@ public class MCPolicy
         return true;
     }
 
+    /// <summary>
+    /// Return as a string the name of the Policy
+    /// </summary>
     public override string ToString()
     {
         if (_name == null)
@@ -305,7 +308,17 @@ public class MCPolicy
 
     }
 
-
-
+    public string PolicyAsString()
+    {
+        string final = "";
+        foreach (State s in _stateActionDic.Keys)
+        {
+            foreach (Action a in _stateActionDic[s].Keys)
+            {
+                final += "State " + s + ", Action " + a + ", p = " + _stateActionDic[s][a] + "\n";
+            }
+        }
+        return final;
+    }
 
 }
