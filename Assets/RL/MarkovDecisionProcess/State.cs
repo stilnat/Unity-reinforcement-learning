@@ -55,11 +55,11 @@ public class State : MatrixND
     {
         if (_name == null)
         {
-            return base.ToString();
+            return base.ToString() + "final = " + _isTerminal;
         }
         else
         {
-            return _name;
+            return _name + ": " + base.ToString() + "final = " + _isTerminal;
         }
 
     }
