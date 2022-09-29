@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Rewards used as 
 /// </summary>
-public class Reward
+public class Reward 
 {
     private float _value;
 
@@ -20,5 +20,9 @@ public class Reward
     {
         _value = reward;
     }
+
+    
+
+
 
 }
