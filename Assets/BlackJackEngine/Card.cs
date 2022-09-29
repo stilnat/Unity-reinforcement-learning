@@ -33,7 +33,7 @@ public class Card
     private CardName cardName;
     private CardType cardType;
 
-    bool isVisible;
+    //bool isVisible;
 
     public CardName GetCardName()
     {
@@ -44,7 +44,7 @@ public class Card
     {
         this.cardName = name;
         this.cardType = type;
-        isVisible = false;
+        //isVisible = false;
 
     }
 
