@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// An action in a Markov decision process, represented by a matrix.
 /// </summary>
