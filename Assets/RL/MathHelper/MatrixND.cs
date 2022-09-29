@@ -259,6 +259,19 @@ public class MatrixND
         _array = new float[allDimensionsProduct];
     }
 
-    
+    public override string ToString()
+    {
+        string final = "";
+        final += "(";
+        foreach(float f in _array)
+        {
+            final += f.ToString() + ", ";
+        }
+        final.Remove(final.Length - 2);
+        final += ")";
+        return final;
+    }
+
+
 
 }
