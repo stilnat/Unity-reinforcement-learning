@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CartPoleState : Agent
+public class CartPoleAgent: Agent
 {
    
     public GameObject _pole;
