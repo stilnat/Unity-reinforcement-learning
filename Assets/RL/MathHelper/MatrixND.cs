@@ -2,13 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class MatrixND
 {
+    [SerializeField]
     protected float[] _array;
+
+    [SerializeField]
     protected int[] _dimensions;
+   
     // an array starting with 1 and containing dn, then dn*dn-1, then dn*...*d2
+    [SerializeField]
     protected int[] _dimensionsProduct;
+
     private int _hashcode;
+
     private bool _hasHashCode;
 
 

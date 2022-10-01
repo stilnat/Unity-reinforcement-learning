@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class State : MatrixND
 {
-
+    [SerializeField]
     private bool _isTerminal;
+
+    [SerializeField]
     private string _name;
 
     public bool IsTerminal

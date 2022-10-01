@@ -135,7 +135,7 @@ public class QLearning
         return (policyToLearn, actionStateValueDictionary);
     }
 
-    public static (State, EnvironmentPolicy, Dictionary<State, Dictionary<EnvironmentAction, StateActionValue>>) QLearningPolicyWithUnityOneStep(Dictionary<State, Dictionary<EnvironmentAction, StateActionValue>> actionStateValueDictionary,
+    public static (State, EnvironmentPolicy, QValueCollection) QLearningPolicyWithUnityOneStep(QValueCollection actionStateValueDictionary,
         State currentState, Agent agent,  EnvironmentPolicy policy, EnvironmentPolicy policyToLearn, float discount, float learningRate, float epsilon)
     {
 

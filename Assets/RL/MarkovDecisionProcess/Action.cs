@@ -1,9 +1,13 @@
 /// <summary>
 /// An action in a Markov decision process, represented by a matrix.
 /// </summary>
+/// 
+using UnityEngine;
+
+[System.Serializable]
 public class Action : MatrixND
 {
-    
+    [SerializeField]
     private string _name;
 
     public string Name { get { return _name; } }

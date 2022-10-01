@@ -1,5 +1,6 @@
 using System;
 
+[System.Serializable]
 public class StateActionValue : IComparable
 {
     public StateActionValue(float stateActionValue, int numberOfVisit)
