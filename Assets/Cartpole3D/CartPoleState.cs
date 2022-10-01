@@ -2,58 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CartPoleState : MonoBehaviour
+public class CartPoleState : Agent
 {
    
     public GameObject _pole;
-
-    private State _state;
-    private int fixed_update_number;
     private int _roughStateSpaceMesh;
     private float _groundLevel;
     private Vector3 _initialPosition ;
-    private float _totalReward;
-    private bool _showTotalReward;
+    private float push;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-       
-        _roughStateSpaceMesh = 5;
+        _roughStateSpaceMesh = 15;
+        push = 70f;
         _groundLevel = 0;
         _initialPosition = gameObject.transform.position;
-        _totalReward = 0;
-        fixed_update_number = 0;
-        _showTotalReward = true;
-        _state = computeState();
-
+        _state = ComputeState();
     }
 
-    private void FixedUpdate()
+    private void Start()
     {
-        
-        if(fixed_update_number % 10 == 0)
-        {
-            _state = computeState();
-            _totalReward += ComputeReward().Value;
-
-
-            if (_state.IsTerminal && _showTotalReward)
-            {
-                Debug.Log("total reward = " + _totalReward);
-                _showTotalReward = false;
-            }
-        }
-
-
-        
-        fixed_update_number += 1;
+        //_pole.GetComponent<ArticulationBody>().AddForce(-transform.right * 50);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        _state = ComputeState();
     }
 
     private float DistanceToCenter()
@@ -61,13 +35,13 @@ public class CartPoleState : MonoBehaviour
         return Vector3.Distance(_initialPosition, gameObject.transform.position);
     }
 
-    public State computeState()
+    public override State ComputeState()
     {
+
         int eulerAngleX = (int)_pole.transform.rotation.eulerAngles.x; 
         int eulerAngleY = (int)_pole.transform.rotation.eulerAngles.y;
         int eulerAngleZ = (int)_pole.transform.rotation.eulerAngles.z;
 
-       // Debug.Log(eulerAngleX + "," + eulerAngleY + "," + eulerAngleZ);
         int distance =  (int) DistanceToCenter() / _roughStateSpaceMesh;
         bool isTerminal;
 
@@ -94,36 +68,77 @@ public class CartPoleState : MonoBehaviour
         return new State(isTerminal, eulerAngleX, eulerAngleY, eulerAngleZ, distance);
     }
 
-    public Action RightAcceleration()
-    { 
-
+    public void RightAcceleration()
+    {
+        var articulationBody = GetComponent<ArticulationBody>();
+        articulationBody.AddForce(transform.right * push);
     }
 
-    public Action LeftAcceleration()
+    public void LeftAcceleration()
+    {
+        var articulationBody = GetComponent<ArticulationBody>();
+        articulationBody.AddForce(-transform.right * push);
+    }
+
+    public void ForwardAcceleration()
+    {
+        var articulationBody = GetComponent<ArticulationBody>();
+        articulationBody.AddForce(transform.forward * push);
+    }
+
+    public void BackwardAcceleration()
+    {
+        var articulationBody = GetComponent<ArticulationBody>();
+        articulationBody.AddForce(-transform.forward * push);
+    }
+
+    public override List<EnvironmentAction> GetAvailableActions(State s)
+    {
+        return GetAvailableActions();
+    }
+
+    public override List<EnvironmentAction> GetAvailableActions()
+    {
+        var listAction = new List<EnvironmentAction>();
+        listAction.Add(new EnvironmentAction(ForwardAcceleration));
+        listAction.Add(new EnvironmentAction(BackwardAcceleration));
+        listAction.Add(new EnvironmentAction(RightAcceleration));
+        listAction.Add(new EnvironmentAction(LeftAcceleration));
+
+        return listAction;
+    }
+
+    public override Reward ObserveReward()
+    {
+        return new Reward(1);
+    }
+
+    public override void ExecuteAction(EnvironmentAction action)
+    {
+        action.Execute();
+    }
+
+    public override void Initialise()
     {
 
+        this.gameObject.GetComponent<ArticulationBody>().enabled = false;
+        
+        this.gameObject.transform.position = new Vector3(0, 1.1f, 0);
+        _pole.transform.rotation =  Quaternion.identity;
+        this.gameObject.transform.rotation = Quaternion.identity;
+        _pole.transform.localPosition = new Vector3(0, 5.1f, 0);
+        this.gameObject.GetComponent<ArticulationBody>().enabled = true;
+        
+        //_pole.GetComponent<ArticulationBody>().AddForce(-transform.right * 50);
     }
 
-    public Action ForwardAcceleration()
-    {
-
-    }
-
-    public BackwardAcceleration()
-    {
-
-    }
-
-    public Reward ComputeReward()
-    {
-        return new Reward(-1);
-    }
-
-    
 
 
 
 
 
-  
+
+
+
+
 }

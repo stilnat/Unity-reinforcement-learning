@@ -705,6 +705,7 @@ GameObject:
   - component: {fileID: 1933085812}
   - component: {fileID: 1933085813}
   - component: {fileID: 1933085811}
+  - component: {fileID: 1933085814}
   m_Layer: 0
   m_Name: Cart
   m_TagString: Untagged
@@ -801,6 +802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3014ca2c9267824fb50024332d433f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _initialise: 0
   _pole: {fileID: 1394774218}
 --- !u!114 &1933085812
 MonoBehaviour:
@@ -866,3 +868,15 @@ ArticulationBody:
   m_Immovable: 0
   m_UseGravity: 1
   m_CollisionDetectionMode: 0
+--- !u!114 &1933085814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933085806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a3f03f72ed8d6340a0384f1b3c78358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
