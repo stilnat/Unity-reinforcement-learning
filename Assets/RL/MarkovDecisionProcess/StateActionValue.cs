@@ -28,4 +28,9 @@ public class StateActionValue : IComparable
         else if (_stateActionValue > stateActionvalueObject._stateActionValue) return 1;
         else return 0;
     }
+
+    public override string ToString()
+    {
+        return _stateActionValue.ToString();
+    }
 }
