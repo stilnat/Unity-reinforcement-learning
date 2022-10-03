@@ -8,7 +8,8 @@
         "TemporalDifference",
         "MarkovDecisionProcessScripts",
         "MathHelperScripts",
-        "CustomExceptionsScript"
+        "CustomExceptionsScript",
+        "EnvironmentAssembly"
     ],
     "includePlatforms": [
         "Editor"
