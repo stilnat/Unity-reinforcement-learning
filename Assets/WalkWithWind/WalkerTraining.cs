@@ -3,9 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [System.Serializable]
-
-//maybe wait for change of state when training using qlearning when applying an action before trying another one.
-public class Cartpole2DTraining : MonoBehaviour
+public class WalkerTraining : MonoBehaviour
 {
 
     private Agent _agent;
@@ -18,16 +16,17 @@ public class Cartpole2DTraining : MonoBehaviour
     public int maxNumberOfEpisode;
 
     public float learningRate = 0.9f;
-    public float learningRateMultiplier = 0.998f;
-    public float learningRateMinimum = 0.01f;
+    public float learningRateMultiplier = 0.99f;
+    public float learningRateMinimum = 0.1f;
     public float epsilon = 1f;
-    public float epsilonMultiplier = 0.999f;
-    public float epsilonMinimum = 0.05f;
+    public float epsilonMultiplier = 0.99f;
+    public float epsilonMinimum = 0.01f;
+    private int step = 0;
 
     [SerializeField]
     private List<float> CumulativeRewardEpisodes;
 
-    private int episodeCounter = 0;
+    public int episodeCounter = 0;
 
     public void disableRenderOnGameObjectAndChilds(GameObject gameObject)
     {
@@ -58,8 +57,6 @@ public class Cartpole2DTraining : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-
         if (!render)
         {
             disableAllRenderer();
@@ -74,8 +71,6 @@ public class Cartpole2DTraining : MonoBehaviour
             string json = File.ReadAllText(@".\test.json");
             _actionStateValue = QValueCollection.CreateFromJSON(json);
             _actionStateValue.infoToCollection(_agent);
-
-          
         }
         else _actionStateValue = new QValueCollection();
         if (File.Exists(@".\rewards.json"))
@@ -92,24 +87,28 @@ public class Cartpole2DTraining : MonoBehaviour
 
     void FixedUpdate()
     {
-        if ((_agent as Cartpole2DAgent)._updateCount % (_agent as Cartpole2DAgent)._nFrame == 0)
+        if ((_agent as WalkerAgent)._updateCount % (_agent as WalkerAgent)._nFrame == 0)
         {
             if (_agent.State.IsTerminal)
             {
                 EndEpisode();
-               
             }
 
             if (_agent.State.IsTerminal == false)
             {
                 var res = QLearning.QLearningPolicyWithUnityOneStep(_actionStateValue, _agent.State, _agent, _policyToFollow,
                     _policyToLearn, 1f, 0.1f, epsilon);
-                
+                if (epsilon > epsilonMinimum)
+                    epsilon *= epsilonMultiplier;
+                if (learningRate > learningRateMinimum)
+                    learningRate = 1f / (learningRateMultiplier * (step + (1f / learningRateMultiplier))); //must decrease such that the sum diverge but the square converges
+
 
                 _policyToLearn = res.Item2;
                 _actionStateValue = res.Item3;
                 _reward.Value += res.Item4.Value;
             }
+            step += 1;
         }
 
 
@@ -119,8 +118,8 @@ public class Cartpole2DTraining : MonoBehaviour
     {
         Debug.Log("on application quit");
 
-        string jsonString = JsonUtility.ToJson(_actionStateValue);
-        File.WriteAllText(@".\test.json", jsonString);
+        //string jsonString = JsonUtility.ToJson(_actionStateValue);
+       // File.WriteAllText(@".\test.json", jsonString);
 
         string jsonrewards = JsonUtility.ToJson(this);
         File.WriteAllText(@".\testrewards.json", jsonrewards);
@@ -135,11 +134,11 @@ public class Cartpole2DTraining : MonoBehaviour
 
     public void QuitGame()
     {
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #else
-             Application.Quit();
-        #endif
+    #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+    #else
+                 Application.Quit();
+    #endif
     }
 
     public void EndEpisode()
@@ -148,11 +147,7 @@ public class Cartpole2DTraining : MonoBehaviour
         CumulativeRewardEpisodes.Add(_reward.Value);
         _reward = new Reward(0);
         episodeCounter += 1;
-        if (epsilon > epsilonMinimum)
-            epsilon *= epsilonMultiplier;
-        if (learningRate > learningRateMinimum)
-            learningRate = 1f / (learningRateMultiplier * (episodeCounter + (1f/learningRateMultiplier))); //must decrease such that the sum diverge but the square converges
-
+        
         if (episodeCounter >= maxNumberOfEpisode)
         {
             QuitGame();

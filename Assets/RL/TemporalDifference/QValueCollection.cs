@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// The serialization completely fails, it's very visible in the walkwithwind environment ....
+/// try to stop and start again, you'll get terribly false value.
+/// </summary>
 [System.Serializable]
 public class QValueCollection : 
     Dictionary<State, Dictionary<EnvironmentAction, StateActionValue>>, ISerializationCallbackReceiver

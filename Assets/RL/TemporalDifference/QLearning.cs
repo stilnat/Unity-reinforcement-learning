@@ -74,100 +74,57 @@ public class QLearning
     }
 
     private static float ComputeTDError(Reward currentReward, State currentState, EnvironmentAction currentAction, State nextState, float discount,
-     Dictionary<State, Dictionary<EnvironmentAction, StateActionValue>> actionStateValueDictionary)
+     QValueCollection QValues, Agent agent)
     {
-        float maxStateActionValue = actionStateValueDictionary[nextState].Max(x => x.Value._stateActionValue);
+        if (!QValues.ContainsKey(nextState)) QLearning.InitialiseQValues(QValues, nextState, agent, 5);
 
-        return currentReward.Value + discount * maxStateActionValue - actionStateValueDictionary[currentState][currentAction]._stateActionValue;
+        float maxQValue = QValues[nextState].Max(x => x.Value._stateActionValue);
+
+        return currentReward.Value + discount * maxQValue - QValues[currentState][currentAction]._stateActionValue;
     }
 
-    public static (EnvironmentPolicy, Dictionary<State, Dictionary<EnvironmentAction, StateActionValue>>) QLearningPolicyWithUnity(State initialState, Agent agent,
-     EnvironmentPolicy policy, float discount, float learningRate, float epsilon, float nbIterations = 50)
-    {
-
-        var actionStateValueDictionary = new Dictionary<State, Dictionary<EnvironmentAction, StateActionValue>>() ;
-        EnvironmentPolicy policyToLearn = new EnvironmentPolicy();
-
-        for (int k = 0; k < nbIterations; k++)
-        {
-            State currentState = initialState;
-            float TDError = 0;
-            int tooMuchIteration = 0;
-
-            while (!currentState.IsTerminal && tooMuchIteration < 5)
-            {
-                tooMuchIteration++;
-                if (actionStateValueDictionary.ContainsKey(currentState))
-                {
-                    policyToLearn.ChooseActionGreedy(currentState, actionStateValueDictionary[currentState]);
-                }
-                else
-                {
-                    var actionsList = agent.GetAvailableActions(currentState);
-                    var actionValueDictionary = new Dictionary<EnvironmentAction, StateActionValue>();
-                    foreach (EnvironmentAction action in actionsList)
-                    {
-                        actionValueDictionary.Add(action, new StateActionValue(0));
-                    }
-                    actionStateValueDictionary.Add(currentState, actionValueDictionary);
-                }
-                
-                EnvironmentAction currentAction = policy.ChooseActionEpsilonGreedy(currentState, actionStateValueDictionary[currentState], epsilon);
-
-
-                Debug.Log("wait successful, iteration number " + tooMuchIteration);
-                agent.ExecuteAction(currentAction);
-
-                Reward currentReward = agent.ObserveReward();
-                State nextState = agent.State;
-
-                if (nextState.IsTerminal)
-                {
-                    break;
-                }
-                TDError = ComputeTDError(currentReward, currentState, currentAction, nextState, discount, actionStateValueDictionary);
-                actionStateValueDictionary[currentState][currentAction]._stateActionValue = actionStateValueDictionary[currentState][currentAction]._stateActionValue
-                    + learningRate * TDError;
-                currentState = nextState;
-            }
-        }
-
-        return (policyToLearn, actionStateValueDictionary);
-    }
-
-    public static (State, EnvironmentPolicy, QValueCollection, Reward) QLearningPolicyWithUnityOneStep(QValueCollection actionStateValueDictionary,
+    public static (State, EnvironmentPolicy, QValueCollection, Reward) QLearningPolicyWithUnityOneStep(QValueCollection QValues,
         State currentState, Agent agent,  EnvironmentPolicy policy, EnvironmentPolicy policyToLearn, float discount, float learningRate, float epsilon)
     {
 
             float TDError;
 
-            if (actionStateValueDictionary.ContainsKey(currentState))
+            if (QValues.ContainsKey(currentState))
             {
-                policyToLearn.ChooseActionGreedy(currentState, actionStateValueDictionary[currentState]);
+                policyToLearn.ChooseActionGreedy(currentState, QValues[currentState]);
             }
             else
             {
-                var actionsList = agent.GetAvailableActions(currentState);
-                var actionValueDictionary = new Dictionary<EnvironmentAction, StateActionValue>();
-                foreach (EnvironmentAction action in actionsList)
-                {
-                    actionValueDictionary.Add(action, new StateActionValue(0));
-                }
-                actionStateValueDictionary.Add(currentState, actionValueDictionary);
+                QLearning.InitialiseQValues(QValues, currentState, agent, 5);
             }
-
-            EnvironmentAction currentAction = policy.ChooseActionEpsilonGreedy(currentState, actionStateValueDictionary[currentState], epsilon);
-
+            //string debugstring = string.Format("gent available current actions = ({0}).", string.Join(", ", agent.GetAvailableActions(currentState)));
+           // Debug.Log(debugstring);
+            EnvironmentAction currentAction = policy.ChooseActionEpsilonGreedy(currentState, QValues[currentState], epsilon);
+            //Debug.Log("action chosen = " + currentAction);
+            
             agent.ExecuteAction(currentAction);
-
+            // TODO maybe change by observeStateAndReward and do computeState in it....
             Reward currentReward = agent.ObserveReward();
             State nextState = agent.State;
 
-            TDError = ComputeTDError(currentReward, currentState, currentAction, nextState, discount, actionStateValueDictionary);
-            actionStateValueDictionary[currentState][currentAction]._stateActionValue = actionStateValueDictionary[currentState][currentAction]._stateActionValue
+            TDError = ComputeTDError(currentReward, currentState, currentAction, nextState, discount, QValues, agent);
+
+            QValues[currentState][currentAction]._stateActionValue = QValues[currentState][currentAction]._stateActionValue
                 + learningRate * TDError;
 
-            return (nextState, policyToLearn, actionStateValueDictionary, currentReward);
+            return (nextState, policyToLearn, QValues, currentReward);
+    }
+
+    public static QValueCollection InitialiseQValues(QValueCollection QValues, State s, Agent agent, float defautValue = 0)
+    {
+        var actionsList = agent.GetAvailableActions(s);
+        var actionValueDictionary = new Dictionary<EnvironmentAction, StateActionValue>();
+        foreach (EnvironmentAction action in actionsList)
+        {
+            actionValueDictionary.Add(action, new StateActionValue(defautValue));
+        }
+        QValues.Add(s, actionValueDictionary);
+        return QValues;
     }
 
 
