@@ -135,7 +135,7 @@ public class QLearning
         return (policyToLearn, actionStateValueDictionary);
     }
 
-    public static (State, EnvironmentPolicy, QValueCollection) QLearningPolicyWithUnityOneStep(QValueCollection actionStateValueDictionary,
+    public static (State, EnvironmentPolicy, QValueCollection, Reward) QLearningPolicyWithUnityOneStep(QValueCollection actionStateValueDictionary,
         State currentState, Agent agent,  EnvironmentPolicy policy, EnvironmentPolicy policyToLearn, float discount, float learningRate, float epsilon)
     {
 
@@ -151,7 +151,7 @@ public class QLearning
                 var actionValueDictionary = new Dictionary<EnvironmentAction, StateActionValue>();
                 foreach (EnvironmentAction action in actionsList)
                 {
-                    actionValueDictionary.Add(action, new StateActionValue(25));
+                    actionValueDictionary.Add(action, new StateActionValue(0));
                 }
                 actionStateValueDictionary.Add(currentState, actionValueDictionary);
             }
@@ -167,7 +167,7 @@ public class QLearning
             actionStateValueDictionary[currentState][currentAction]._stateActionValue = actionStateValueDictionary[currentState][currentAction]._stateActionValue
                 + learningRate * TDError;
 
-            return (nextState, policyToLearn, actionStateValueDictionary);
+            return (nextState, policyToLearn, actionStateValueDictionary, currentReward);
     }
 
 
