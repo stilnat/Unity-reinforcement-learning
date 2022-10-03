@@ -6,28 +6,40 @@ public class CartPoleAgent: Agent
 {
    
     public GameObject _pole;
-    private int _roughStateSpaceMesh;
+    private int _roughStateSpaceMeshAngle;
+    private int _roughStateSpaceMeshDistance;
     private float _groundLevel;
     private Vector3 _initialPosition ;
     private float push;
+    private float _lastTimeInitialise;
+    public int _nFrame;
+    public int _updateCount;
 
     private void Awake()
     {
-        _roughStateSpaceMesh = 15;
-        push = 70f;
+        _roughStateSpaceMeshAngle = 10;
+        _roughStateSpaceMeshDistance = 25;
+        push = 150f;
         _groundLevel = 0;
         _initialPosition = gameObject.transform.position;
         _state = ComputeState();
+        _lastTimeInitialise = Time.realtimeSinceStartup;
+        _nFrame = 25;
     }
 
     private void Start()
     {
-        //_pole.GetComponent<ArticulationBody>().AddForce(-transform.right * 50);
+        _pole.GetComponent<ArticulationBody>().AddForce(-transform.right * 50);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        _state = ComputeState();
+        if (_updateCount % _nFrame ==0)
+        {
+            _state = ComputeState();
+        }
+        _nFrame += 1;
+        
     }
 
     private float DistanceToCenter()
@@ -42,7 +54,7 @@ public class CartPoleAgent: Agent
         int eulerAngleY = (int)_pole.transform.rotation.eulerAngles.y;
         int eulerAngleZ = (int)_pole.transform.rotation.eulerAngles.z;
 
-        int distance =  (int) DistanceToCenter() / _roughStateSpaceMesh;
+        int distance =  (int) DistanceToCenter() / _roughStateSpaceMeshDistance;
         bool isTerminal;
 
 
@@ -61,9 +73,9 @@ public class CartPoleAgent: Agent
             isTerminal = true;
         }
 
-        eulerAngleX = eulerAngleX / _roughStateSpaceMesh;
-        eulerAngleY = eulerAngleY / _roughStateSpaceMesh;
-        eulerAngleZ = eulerAngleZ / _roughStateSpaceMesh;
+        eulerAngleX = eulerAngleX / _roughStateSpaceMeshAngle;
+        eulerAngleY = eulerAngleY / _roughStateSpaceMeshAngle;
+        eulerAngleZ = eulerAngleZ / _roughStateSpaceMeshAngle;
 
         return new State(isTerminal, eulerAngleX, eulerAngleY, eulerAngleZ, distance);
     }
@@ -111,6 +123,7 @@ public class CartPoleAgent: Agent
     public override Reward ObserveReward()
     {
         return new Reward(1);
+        
     }
 
     public override void ExecuteAction(EnvironmentAction action)
@@ -123,13 +136,13 @@ public class CartPoleAgent: Agent
 
         this.gameObject.GetComponent<ArticulationBody>().enabled = false;
         
-        this.gameObject.transform.position = new Vector3(0, 1.1f, 0);
+        this.gameObject.transform.position = new Vector3(0, 1f, 0);
         _pole.transform.rotation =  Quaternion.identity;
         this.gameObject.transform.rotation = Quaternion.identity;
         _pole.transform.localPosition = new Vector3(0, 5.1f, 0);
         this.gameObject.GetComponent<ArticulationBody>().enabled = true;
-        
-        //_pole.GetComponent<ArticulationBody>().AddForce(-transform.right * 50);
+        _lastTimeInitialise = Time.realtimeSinceStartup;
+        _pole.GetComponent<ArticulationBody>().AddForce(-transform.right * 50);
     }
 
 

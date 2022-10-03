@@ -17,6 +17,7 @@ public class CartPoleTraining : MonoBehaviour
         {
             string json = File.ReadAllText(@".\test.json");
             _actionStateValue = QValueCollection.CreateFromJSON(json);
+            _actionStateValue.infoToCollection(_agent);
         }
         else _actionStateValue = new QValueCollection();
 
@@ -25,23 +26,26 @@ public class CartPoleTraining : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (_agent.State.IsTerminal)
+        if((_agent as CartPoleAgent)._updateCount % (_agent as CartPoleAgent)._nFrame == 0)
         {
-            _agent.Initialise();
+            if (_agent.State.IsTerminal)
+            {
+                _agent.Initialise();
+            }
 
+            //Debug.Log("Initialise in cartpoleTraining :  position = " + this.gameObject.transform.position);
+
+            if (_agent.State.IsTerminal == false)
+            {
+                var res = QLearning.QLearningPolicyWithUnityOneStep(_actionStateValue, _agent.State, _agent, _policyToFollow, _policyToLearn, 1f, 0.2f, 0.3f);
+
+                _policyToLearn = res.Item2;
+                _actionStateValue = res.Item3;
+            }
         }
 
-        //Debug.Log("Initialise in cartpoleTraining :  position = " + this.gameObject.transform.position);
-
-        if (_agent.State.IsTerminal == false)
-        {
-            var res = QLearning.QLearningPolicyWithUnityOneStep(_actionStateValue, _agent.State, _agent, _policyToFollow, _policyToLearn, 0.99f, 0.7f, 0.1f);
-            
-            _policyToLearn = res.Item2;
-            _actionStateValue = res.Item3;
-        }
 
     }
 
