@@ -490,9 +490,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _initialise: 0
-  platform: {fileID: 1729211060}
-  _updateCount: 0
-  _nFrame: 1
+  environment: {fileID: 1729211065}
 --- !u!114 &1467200600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -514,6 +512,8 @@ MonoBehaviour:
   epsilon: 1
   epsilonMultiplier: 0.999
   epsilonMinimum: 0.001
+  _updateCount: 0
+  _nFrame: 10
   CumulativeRewardEpisodes: []
   episodeCounter: 0
 --- !u!1 &1729211060
@@ -528,6 +528,7 @@ GameObject:
   - component: {fileID: 1729211063}
   - component: {fileID: 1729211062}
   - component: {fileID: 1729211061}
+  - component: {fileID: 1729211065}
   m_Layer: 0
   m_Name: platform
   m_TagString: Untagged
@@ -612,3 +613,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1729211065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729211060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc47bab783734c04cbca0e718b6eb4cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

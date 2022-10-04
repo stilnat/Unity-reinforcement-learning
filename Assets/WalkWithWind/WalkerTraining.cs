@@ -23,6 +23,9 @@ public class WalkerTraining : MonoBehaviour
     public float epsilonMinimum = 0.01f;
     private int step = 0;
 
+    public int _updateCount = 0;
+    public int _nFrame;
+
     [SerializeField]
     private List<float> CumulativeRewardEpisodes;
 
@@ -87,7 +90,9 @@ public class WalkerTraining : MonoBehaviour
 
     void FixedUpdate()
     {
-        if ((_agent as WalkerAgent)._updateCount % (_agent as WalkerAgent)._nFrame == 0)
+        _updateCount += 1;
+
+        if (_updateCount % _nFrame == 0)
         {
             if (_agent.State.IsTerminal)
             {

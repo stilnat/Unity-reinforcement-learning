@@ -5,22 +5,11 @@ using UnityEngine;
 public class WalkerAgent : Agent
 {
 
-    public GameObject platform;
-    public int _updateCount =0;
-    public int _nFrame;
+    public WalkerEnvironment environment;
 
     public void Start()
     {
-        Mesh planeMesh = platform.GetComponent<MeshFilter>().mesh;
-        Bounds bounds = planeMesh.bounds;
-        Debug.Log(bounds.size.x);
-        Debug.Log(bounds.size.z);
         _state = ComputeState();
-    }
-
-    public void FixedUpdate()
-    {
-        _updateCount += 1;
     }
 
     public override State ComputeState()
@@ -34,7 +23,7 @@ public class WalkerAgent : Agent
     public override void ExecuteAction(EnvironmentAction action)
     {
         action.Execute();
-        AddMovementFromWind();
+        environment.ApplyEnvironment(this);
         _state = ComputeState();
     }
 
@@ -45,7 +34,6 @@ public class WalkerAgent : Agent
         if (CanMoveBackwardZ(s)) actions.Add(new EnvironmentAction(MoveBackwardZ));
         if (CanMoveForwardX(s)) actions.Add(new EnvironmentAction(MoveForwardX));
         if (CanMoveBackwardX(s)) actions.Add(new EnvironmentAction(MoveBackwardX));
-
         return actions;
     }
 
@@ -106,16 +94,7 @@ public class WalkerAgent : Agent
         return new Reward(-1);
     }
 
-    public void AddMovementFromWind()
-    {
-        int[] winds = new int[10] { 0,0,0,1,1,1,2,2,1,0};
-        var wind = new Vector3(winds[(int)gameObject.transform.position.z], 0, 0);
-        if (gameObject.transform.position.x - wind.x < 0)
-        {
-            gameObject.transform.position = new Vector3(0.5f, gameObject.transform.position.y, gameObject.transform.position.z);
-        }
-        else gameObject.transform.position -= wind;
-    }
+
 
 
 }
