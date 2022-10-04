@@ -57,11 +57,6 @@ public class WalkerAgent : Agent
         return s.Get(0) > 0;
     }
 
-    //TODO that should not be a thing ....
-    public override List<EnvironmentAction> GetAvailableActions()
-    {
-        return GetAvailableActions(new State(false,0,0));
-    }
 
     public void MoveForwardZ()
     {

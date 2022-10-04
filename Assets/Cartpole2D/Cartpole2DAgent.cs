@@ -115,11 +115,6 @@ public class Cartpole2DAgent : Agent
 
     public override List<EnvironmentAction> GetAvailableActions(State s)
     {
-        return GetAvailableActions();
-    }
-
-    public override List<EnvironmentAction> GetAvailableActions()
-    {
         var listAction = new List<EnvironmentAction>();
         listAction.Add(new EnvironmentAction(ForwardAcceleration));
         listAction.Add(new EnvironmentAction(BackwardAcceleration));

@@ -36,8 +36,6 @@ public abstract class Agent : MonoBehaviour
 
     public abstract List<EnvironmentAction> GetAvailableActions(State s);
 
-    public abstract List<EnvironmentAction> GetAvailableActions();
-
     public abstract void Initialise();
 
     /*protected virtual void OnProcessCompleted() //protected virtual method
