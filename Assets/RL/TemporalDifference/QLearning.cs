@@ -83,7 +83,7 @@ public class QLearning
         return currentReward.Value + discount * maxQValue - QValues[currentState][currentAction]._stateActionValue;
     }
 
-    public static (State, EnvironmentPolicy, QValueCollection, Reward) QLearningPolicyWithUnityOneStep(QValueCollection QValues,
+    public static (State, EnvironmentPolicy, QValueCollection, Reward) TabularQLearning(QValueCollection QValues,
         State currentState, Agent agent,  EnvironmentPolicy policy, EnvironmentPolicy policyToLearn, float discount, float learningRate, float epsilon)
     {
 

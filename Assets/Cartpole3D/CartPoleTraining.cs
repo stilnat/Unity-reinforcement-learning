@@ -39,7 +39,7 @@ public class CartPoleTraining : MonoBehaviour
 
             if (_agent.State.IsTerminal == false)
             {
-                var res = QLearning.QLearningPolicyWithUnityOneStep(_actionStateValue, _agent.State, _agent, _policyToFollow, _policyToLearn, 1f, 0.2f, 0.3f);
+                var res = QLearning.TabularQLearning(_actionStateValue, _agent.State, _agent, _policyToFollow, _policyToLearn, 1f, 0.2f, 0.3f);
 
                 _policyToLearn = res.Item2;
                 _actionStateValue = res.Item3;

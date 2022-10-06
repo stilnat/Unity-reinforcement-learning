@@ -101,7 +101,7 @@ public class WalkerTraining : MonoBehaviour
 
             if (_agent.State.IsTerminal == false)
             {
-                var res = QLearning.QLearningPolicyWithUnityOneStep(_actionStateValue, _agent.State, _agent, _policyToFollow,
+                var res = QLearning.TabularQLearning(_actionStateValue, _agent.State, _agent, _policyToFollow,
                     _policyToLearn, 1f, 0.1f, epsilon);
                 if (epsilon > epsilonMinimum)
                     epsilon *= epsilonMultiplier;
