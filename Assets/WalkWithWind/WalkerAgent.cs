@@ -61,21 +61,25 @@ public class WalkerAgent : Agent
     public void MoveForwardZ()
     {
         transform.position += new Vector3(0, 0, 1);
+        transform.rotation = Quaternion.Euler(0, 90, 0);
     }
 
     public void MoveBackwardZ()
     {
         transform.position += new Vector3(0, 0, -1);
+        transform.rotation = Quaternion.Euler(0, -90, 0);
     }
 
     public void MoveForwardX()
     {
         transform.position += new Vector3(1, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
     public void MoveBackwardX()
     {
         transform.position += new Vector3(-1, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     public override void Initialise()
