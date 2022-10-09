@@ -1,28 +1,28 @@
 using System.IO;
 using UnityEngine;
 
-public class CartPoleTraining : MonoBehaviour
+public class CartPoleTraining : Trainer
 {
+    private TabularQLearning _trainingMethod;
 
-    private Agent _agent;
-    private QValueCollection _actionStateValue;
-    private EnvironmentPolicy _policyToLearn;
-    private EnvironmentPolicy _policyToFollow;
+    public float learnRate = 0.9f;
+    public float learnRateMultiplier = 0.99f;
+    public float learnRateMinimum = 0.1f;
+    public float epsilon = 1f;
+    public float epsilonMultiplier = 0.99f;
+    public float epsilonMinimum = 0.01f;
+    public float discount = 1f;
+    public float defaultQValue = 0;
 
-   // Start is called before the first frame update
-   void Start()
+    // Start is called before the first frame update
+    public override void Start()
     {
-        _agent = gameObject.GetComponent<Agent>();
-        if (File.Exists(@".\test.json"))
-        {
-            string json = File.ReadAllText(@".\test.json");
-            _actionStateValue = QValueCollection.CreateFromJSON(json);
-            _actionStateValue.infoToCollection(_agent);
-        }
-        else _actionStateValue = new QValueCollection();
+        base.Start();
+        _trainingMethod = new TabularQLearning(learnRate, learnRateMultiplier, learnRateMinimum, epsilon,
+           epsilonMultiplier, epsilonMinimum, discount, 0);
 
-        _policyToLearn = new EnvironmentPolicy();
-        _policyToFollow = new EnvironmentPolicy();
+        if (chargeData) ChargeTraining();
+
     }
 
     // Update is called once per frame
@@ -30,33 +30,28 @@ public class CartPoleTraining : MonoBehaviour
     {
         if((_agent as CartPoleAgent)._updateCount % (_agent as CartPoleAgent)._nFrame == 0)
         {
-            if (_agent.State.IsTerminal)
-            {
-                _agent.Initialise();
-            }
-
-            //Debug.Log("Initialise in cartpoleTraining :  position = " + this.gameObject.transform.position);
+            if (_agent.State.IsTerminal) _agent.Initialise();
 
             if (_agent.State.IsTerminal == false)
             {
-                var res = QLearning.TabularQLearning(_actionStateValue, _agent.State, _agent, _policyToFollow, _policyToLearn, 1f, 0.2f, 0.3f);
-
-                _policyToLearn = res.Item2;
-                _actionStateValue = res.Item3;
+                _trainingMethod.Step(_agent);
             }
         }
-
-
     }
 
-    private void OnApplicationQuit()
+    public override void ChargeTraining()
     {
-        Debug.Log("on application quit");
+        if (File.Exists(@".\test.json"))
+        {
+            string json = File.ReadAllText(@".\test.json");
+            _trainingMethod._qValues = QValueCollection.CreateFromJSON(json);
+            _trainingMethod._qValues.infoToCollection(_agent);
+        }
+    }
 
-        string jsonString = JsonUtility.ToJson(_actionStateValue);
+    public override void SaveTraining()
+    {
+        string jsonString = JsonUtility.ToJson(_trainingMethod._qValues);
         File.WriteAllText(@".\test.json", jsonString);
     }
-
-
-
 }

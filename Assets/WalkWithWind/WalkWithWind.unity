@@ -589,16 +589,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83741350da64b974597716058be03248, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  render: 1
   timeScale: 1
-  maxNumberOfEpisode: 500
-  learningRate: 1
-  learningRateMultiplier: 0.995
-  learningRateMinimum: 0.02
-  epsilon: 1
-  epsilonMultiplier: 0.995
-  epsilonMinimum: 0.01
+  render: 1
+  chargeData: 0
+  SaveData: 0
   _updateCount: 0
   _nFrame: 1
-  CumulativeRewardEpisodes: []
+  maxNumberOfEpisode: 500
   episodeCounter: 0
+  CumulativeRewardEpisodes: []
+  learnRate: 0.95
+  learnRateMultiplier: 0.005
+  learnRateMinimum: 0.01
+  epsilon: 0.5
+  epsilonMultiplier: 0.998
+  epsilonMinimum: 0.01
+  discount: 1
+  defaultQValue: 10

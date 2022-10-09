@@ -21,7 +21,7 @@ public class TestEnvironmentPolicy
         int count = 10000;
         for(int i = 0; i<count; i++)
         {
-            actionChosen = environmentPolicy.ChooseActionEpsilonGreedy(state, stateActionValues, eps);
+            actionChosen = environmentPolicy.ChooseActionEpsilonGreedyAndLearn(state, stateActionValues, eps);
 
             if (actionChosen._actionToDoNoParameters.Method.Name == "ActionOne")
             {

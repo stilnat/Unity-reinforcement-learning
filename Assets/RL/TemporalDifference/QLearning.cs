@@ -73,59 +73,7 @@ public class QLearning
         return currentReward.Value + discount * maxStateActionValue - actionStateValueDictionary[currentState][currentAction]._stateActionValue;
     }
 
-    private static float ComputeTDError(Reward currentReward, State currentState, EnvironmentAction currentAction, State nextState, float discount,
-     QValueCollection QValues, Agent agent)
-    {
-        if (!QValues.ContainsKey(nextState)) QLearning.InitialiseQValues(QValues, nextState, agent, 5);
 
-        float maxQValue = QValues[nextState].Max(x => x.Value._stateActionValue);
-
-        return currentReward.Value + discount * maxQValue - QValues[currentState][currentAction]._stateActionValue;
-    }
-
-    public static (State, EnvironmentPolicy, QValueCollection, Reward) TabularQLearning(QValueCollection QValues,
-        State currentState, Agent agent,  EnvironmentPolicy policy, EnvironmentPolicy policyToLearn, float discount, float learningRate, float epsilon)
-    {
-
-            float TDError;
-
-            if (QValues.ContainsKey(currentState))
-            {
-                policyToLearn.ChooseActionGreedy(currentState, QValues[currentState]);
-            }
-            else
-            {
-                QLearning.InitialiseQValues(QValues, currentState, agent, 5);
-            }
-            //string debugstring = string.Format("gent available current actions = ({0}).", string.Join(", ", agent.GetAvailableActions(currentState)));
-           // Debug.Log(debugstring);
-            EnvironmentAction currentAction = policy.ChooseActionEpsilonGreedy(currentState, QValues[currentState], epsilon);
-            //Debug.Log("action chosen = " + currentAction);
-            
-            agent.ExecuteAction(currentAction);
-            // TODO maybe change by observeStateAndReward and do computeState in it....
-            Reward currentReward = agent.ObserveReward();
-            State nextState = agent.State;
-
-            TDError = ComputeTDError(currentReward, currentState, currentAction, nextState, discount, QValues, agent);
-
-            QValues[currentState][currentAction]._stateActionValue = QValues[currentState][currentAction]._stateActionValue
-                + learningRate * TDError;
-
-            return (nextState, policyToLearn, QValues, currentReward);
-    }
-
-    public static QValueCollection InitialiseQValues(QValueCollection QValues, State s, Agent agent, float defautValue = 0)
-    {
-        var actionsList = agent.GetAvailableActions(s);
-        var actionValueDictionary = new Dictionary<EnvironmentAction, StateActionValue>();
-        foreach (EnvironmentAction action in actionsList)
-        {
-            actionValueDictionary.Add(action, new StateActionValue(defautValue));
-        }
-        QValues.Add(s, actionValueDictionary);
-        return QValues;
-    }
 
 
 

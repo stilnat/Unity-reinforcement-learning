@@ -32,7 +32,7 @@ public class EnvironmentPolicy
     /// <param name="s">The state the agent is in. </param>
     /// <param name="stateActionValues"> All available actions in state s, and their respective values.</param>
     /// <returns>The chosen action.</returns>
-    public EnvironmentAction ChooseActionGreedy(State s, Dictionary<EnvironmentAction, StateActionValue> stateActionValues)
+    public EnvironmentAction ChooseActionGreedyAndLearn(State s, Dictionary<EnvironmentAction, StateActionValue> stateActionValues)
     {
         EnvironmentAction bestAction = stateActionValues.FirstOrDefault(x => x.Value.Equals(stateActionValues.Values.Max())).Key;
 
@@ -43,7 +43,18 @@ public class EnvironmentPolicy
         return bestAction;
     }
 
-    public EnvironmentAction ChooseActionUniform(State s, List<EnvironmentAction> actions)
+    /// <summary>
+    /// Choose an action in state s according to the highest state-action value. This method modify this policy.
+    /// </summary>
+    /// <param name="s">The state the agent is in. </param>
+    /// <param name="stateActionValues"> All available actions in state s, and their respective values.</param>
+    /// <returns>The chosen action.</returns>
+    public static EnvironmentAction ChooseActionGreedy(State s, Dictionary<EnvironmentAction, StateActionValue> stateActionValues)
+    {
+        return stateActionValues.FirstOrDefault(x => x.Value.Equals(stateActionValues.Values.Max())).Key;
+    }
+
+    public EnvironmentAction ChooseActionUniformAndLearn(State s, List<EnvironmentAction> actions)
     {
         //TODO check if the sum of every action sum to one. This could easily do something wrong if some actions were defined before.
         // maybe put to 0 any other action 
@@ -57,6 +68,11 @@ public class EnvironmentPolicy
         return actions.RandomElementByWeight(x => 1f / actions.Count);
     }
 
+    public static EnvironmentAction ChooseActionUniform(State s, List<EnvironmentAction> actions)
+    {
+        return actions.RandomElementByWeight(x => 1f / actions.Count);
+    }
+
     /// <summary>
     /// Choose an action in state s according to the highest state-action value, and with probability epsilon, take a random action.
     /// </summary>
@@ -64,27 +80,37 @@ public class EnvironmentPolicy
     /// <param name="stateActionValues"> All available actions in state s, and their respective values.</param>
     /// <param name="epsilon"> A probability between 0 and 1 to choose a random action instead of the most valuable.
     /// <returns>The chosen action.</returns>
-    public EnvironmentAction ChooseActionEpsilonGreedy(State s, Dictionary<EnvironmentAction, StateActionValue> stateActionValues, float epsilon)
+    public static EnvironmentAction ChooseActionEpsilonGreedy(State s, Dictionary<EnvironmentAction, StateActionValue> qValues, float epsilon)
     {
         List<bool> GreedyOrRandom = new List<bool>() { true, false };
         Func<bool, float> weights = x => { if (x == true) return epsilon; else return 1 - epsilon; };
         bool isRandom = GreedyOrRandom.RandomElementByWeight(weights);
-        EnvironmentAction randomAction = ChooseActionUniform(s, stateActionValues.Keys.ToList());
-        EnvironmentAction greedyAction = ChooseActionGreedy(s, stateActionValues);
+        EnvironmentAction randomAction = ChooseActionUniform(s, qValues.Keys.ToList());
+        EnvironmentAction greedyAction = ChooseActionGreedy(s, qValues);
+        return isRandom ? randomAction : greedyAction;
+    }
+
+    public EnvironmentAction ChooseActionEpsilonGreedyAndLearn(State s, Dictionary<EnvironmentAction, StateActionValue> qValues, float epsilon)
+    {
+        List<bool> GreedyOrRandom = new List<bool>() { true, false };
+        Func<bool, float> weights = x => { if (x == true) return epsilon; else return 1 - epsilon; };
+        bool isRandom = GreedyOrRandom.RandomElementByWeight(weights);
+        EnvironmentAction randomAction = ChooseActionUniform(s, qValues.Keys.ToList());
+        EnvironmentAction greedyAction = ChooseActionGreedy(s, qValues);
 
         if (_stateActionDic.ContainsKey(s)) _stateActionDic[s].Clear();
         else _stateActionDic.Add(s, new Dictionary<EnvironmentAction, float>());
 
-        foreach (EnvironmentAction a in stateActionValues.Keys)
+        foreach (EnvironmentAction a in qValues.Keys)
         {
-            _stateActionDic[s].Add(a, epsilon / stateActionValues.Keys.Count);
+            _stateActionDic[s].Add(a, epsilon / qValues.Keys.Count);
         }
         _stateActionDic[s][greedyAction] += 1 - epsilon;
 
         return isRandom ? randomAction : greedyAction;
     }
 
-    
+
 
     public override bool Equals(object obj)
     {
