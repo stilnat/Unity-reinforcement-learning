@@ -275,7 +275,7 @@ public class MatrixND
         {
             final += f.ToString() + ", ";
         }
-        final.Remove(final.Length - 2);
+        final = final.Remove(final.Length - 2);
         final += ")";
         return final;
     }
