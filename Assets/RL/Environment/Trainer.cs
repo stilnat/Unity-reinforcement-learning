@@ -40,7 +40,7 @@ public abstract class Trainer : MonoBehaviour
 
 
     // Update is called once per frame
-    public virtual void Update()
+    public virtual void FixedUpdate()
     {
         _updateCount += 1;
     }
