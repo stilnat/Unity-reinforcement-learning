@@ -14,8 +14,13 @@ public abstract class Agent : MonoBehaviour
     public State State
     {
         get { return _state; }
-    } 
-    
+    }
+  /*  public abstract State InitialState
+    {
+        get;
+    }*/
+
+
     // Start is called before the first frame update
     void Start()
     {
