@@ -52,8 +52,8 @@ public class TabularQLearning
         EnvironmentAction currentA = EnvironmentPolicy.ChooseActionEpsilonGreedy(currentS, _qValues[currentS], _epsilon);
         agent.ExecuteAction(currentA);
         // TODO maybe change by observeStateAndReward and do computeState in it....
-        Reward currentR = agent.ObserveReward();
-        State nextS = agent.State;
+        Reward currentR = agent.ObserveReward(); //this should wait for next update
+        State nextS = agent.State; 
 
         UpdateQValues(currentR, currentS, currentA, nextS, agent);
         if (HasLearnRateMultiplier) ComputeNewLearnRate();
