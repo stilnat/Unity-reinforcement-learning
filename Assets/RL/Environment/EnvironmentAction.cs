@@ -19,4 +19,15 @@ public class EnvironmentAction
     {
         return _actionToDoNoParameters.Method.Name;
     }
+
+    public override int GetHashCode()
+    {
+        return ToString().GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        var other = obj as EnvironmentAction;
+        return other != null && other.ToString() == this.ToString();
+    }
 }
