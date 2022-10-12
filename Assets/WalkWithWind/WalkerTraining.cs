@@ -26,7 +26,7 @@ public class WalkerTraining : Trainer
             epsilonMultiplier, epsilonMinimum, discount, 0);
     }
 
-    void FixedUpdate()
+    public override void FixedUpdate()
     {
         if (_updateCount % _nFrame == 0)
         {

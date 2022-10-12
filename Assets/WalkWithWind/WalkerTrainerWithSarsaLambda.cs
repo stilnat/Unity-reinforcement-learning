@@ -1,29 +1,23 @@
 using System.IO;
 using UnityEngine;
 using System.Collections.Generic;
-// the only way to check is to do it by hand for a few steps and see if the result are correct ....
 [System.Serializable]
 public class WalkerTrainerWithSarsaLambda : Trainer
 {
 
-    private EnvironmentSarsaLambda _trainingMethod;
+    public EnvironmentSarsaLambda _trainingMethod;
 
     public float learnRate = 0.9f;
-    //public float learnRateMultiplier = 0.005f;
-    //public float learnRateMinimum = 0.1f;
     public float epsilon = 1f;
-   // public float epsilonMultiplier = 0.99f;
-    //public float epsilonMinimum = 0.01f;
     public float discount = 1f;
     public float defaultQValue = 0;
     public float eligibilityDecay = 0.99f;
 
-
-    // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
-        _trainingMethod = new EnvironmentSarsaLambda(_agent.ComputeState(), epsilon, discount, learnRate, defaultQValue, eligibilityDecay);
+        _trainingMethod = new EnvironmentSarsaLambda(_agent.ComputeState(), _agent.GetAvailableActions(_agent.ComputeState())[0],
+            epsilon, discount, learnRate, defaultQValue, eligibilityDecay);
     }
 
     public override void FixedUpdate()

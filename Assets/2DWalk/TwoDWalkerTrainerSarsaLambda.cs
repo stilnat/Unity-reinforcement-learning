@@ -19,7 +19,8 @@ public class TwoDWalkerTrainerSarsaLambda: Trainer
     public override void Start()
     {
         base.Start();
-        _trainingMethod = new EnvironmentSarsaLambda(_agent.ComputeState(), epsilon, discount, learnRate, defaultQValue, eligibilityDecay);
+        _trainingMethod = new EnvironmentSarsaLambda(_agent.ComputeState(), _agent.GetAvailableActions(_agent.ComputeState())[0], epsilon, discount,
+            learnRate, defaultQValue, eligibilityDecay);
     }
 
     public override void FixedUpdate()

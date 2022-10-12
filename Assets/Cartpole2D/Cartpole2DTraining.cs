@@ -28,7 +28,7 @@ public class Cartpole2DTraining : Trainer
 
     }
 
-    void FixedUpdate()
+    public override void FixedUpdate()
     {
         if ((_agent as Cartpole2DAgent)._updateCount % (_agent as Cartpole2DAgent)._nFrame == 0)
         {

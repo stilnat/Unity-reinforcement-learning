@@ -6,7 +6,7 @@ public abstract class Agent : MonoBehaviour
 {
 
     private int stateEveryNUpdate = 1;
-    protected State _state;
+    public State _state;
     protected GameObject _agentGameObject;
     protected EnvironmentPolicy environmentPolicy;
     public bool _initialise;
