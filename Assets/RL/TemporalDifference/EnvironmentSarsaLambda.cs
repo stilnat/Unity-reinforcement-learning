@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// issue with sarsa lambda, it sometimes stay stuck in a loop with high discount factor and epsilon to zero....
+/// This finally works !! To optimise it, instead of updating every action value, use the trajectory to determine 
+/// the last states in which the eligibility trace is sensibly superior to 0.  Update only those states.
+/// Much more computationaly efficient.
+/// It would be also cool to show state action using 
 /// </summary>
 
 public class EnvironmentSarsaLambda
@@ -16,8 +19,10 @@ public class EnvironmentSarsaLambda
     public float _discount;
     public float _defaultQValue;
     public EnvironmentTrajectory _trajectory;
+    public EnvironmentAction _currentA;
+    public EnvironmentAction _initialA;
 
-    public EnvironmentSarsaLambda(State initialState, float epsilon, float discount, float learnRate, float defautQValue, float eligibilityDecay)
+    public EnvironmentSarsaLambda(State initialState, EnvironmentAction initialAction, float epsilon, float discount, float learnRate, float defautQValue, float eligibilityDecay)
     {
         _epsilon = epsilon;
         _discount = discount;
@@ -26,6 +31,8 @@ public class EnvironmentSarsaLambda
         _eligibilityDecay = eligibilityDecay;
         _trajectory = new EnvironmentTrajectory(initialState);
         _qValues = new QValueCollection();
+        _currentA = initialAction;
+        _initialA = initialAction;
     }
 
     private QValueCollection InitialiseQValues(State s, Agent agent, float defautValue = 0)
@@ -52,33 +59,35 @@ public class EnvironmentSarsaLambda
         State currentS = agent.State;
 
         if (!_qValues.ContainsKey(currentS)) InitialiseQValues(currentS, agent, _defaultQValue);
+        agent.ExecuteAction(_currentA);
 
-        EnvironmentAction currentA = EnvironmentPolicy.ChooseActionEpsilonGreedy(currentS, _qValues[currentS], _epsilon);
-        agent.ExecuteAction(currentA);
         Reward currentR = agent.ObserveReward(); //this should wait for next update
         State nextS = agent.State;
 
-        _trajectory.AddStep(currentA, currentR, nextS);
+        _trajectory.AddStep(_currentA, currentR, nextS);
         if (nextS.IsTerminal)
         {
             ResetEligibilityTrace();
             agent.Initialise();
             _trajectory = new EnvironmentTrajectory(agent.State);
+            _currentA = _initialA;
             return;
         }
 
         if (!_qValues.ContainsKey(nextS)) InitialiseQValues(nextS, agent, _defaultQValue);
         EnvironmentAction nextA = EnvironmentPolicy.ChooseActionEpsilonGreedy(nextS, _qValues[nextS], _epsilon);
 
-        float TDError = ComputeTDError(currentR, currentS, currentA, nextS, nextA);
+        float TDError = ComputeTDError(currentR, currentS, _currentA, nextS, nextA);
 
-        _qValues[currentS][currentA]._eligibilityTrace += 1;
+        _qValues[currentS][_currentA]._eligibilityTrace += 1;
 
         UpdateStateActionValues(TDError);
 
-        SetEligibilityTrace(currentS, currentA);
+        SetEligibilityTrace(currentS, _currentA);
 
         _trajectory.NextStep();
+
+        _currentA = nextA;
     }
 
 
@@ -99,14 +108,11 @@ public class EnvironmentSarsaLambda
     {
         State lastState = _trajectory.States[_trajectory.States.Count - 1];
         int i = 0;
-        foreach (State stateEncountered in _trajectory.States) //setting eligibility traces
+        foreach (State state in _qValues.Keys)
         {
-            if (i < _trajectory.States.Count -1)
+            foreach (EnvironmentAction action in _qValues[state].Keys)
             {
-                    EnvironmentAction actionAtStepI = _trajectory.GetActionForStateNumber(i);
-
-                    _qValues[stateEncountered][actionAtStepI]._eligibilityTrace *= _discount * _eligibilityDecay;
-                    i++;
+                _qValues[state][action]._eligibilityTrace *= _discount * _eligibilityDecay;
             }
         }
     }
@@ -117,13 +123,11 @@ public class EnvironmentSarsaLambda
     private void UpdateStateActionValues(float TDError)
     {
         int i = 0;
-        foreach (State state in _trajectory.States)
+        foreach (State state in _qValues.Keys)
         {
-            if (i < _trajectory.States.Count - 1)
+            foreach(EnvironmentAction action in _qValues[state].Keys)
             {
-                var action = _trajectory.GetActionForStateNumber(i);
-                _qValues[state][action]._stateActionValue +=  _learnRate * TDError * _qValues[state][action]._eligibilityTrace;
-                i = i + 1;
+                _qValues[state][action]._stateActionValue += _learnRate * TDError * _qValues[state][action]._eligibilityTrace;
             }
         }
     }
