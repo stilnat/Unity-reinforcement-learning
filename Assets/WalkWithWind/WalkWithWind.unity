@@ -178,15 +178,15 @@ MonoBehaviour:
   chargeData: 0
   SaveData: 0
   _updateCount: 0
-  _nFrame: 50
+  _nFrame: 25
   maxNumberOfEpisode: 100000
   episodeCounter: 0
   CumulativeRewardEpisodes: []
-  learnRate: 0.2
-  epsilon: 0.1
+  learnRate: 0.1
+  epsilon: 0
   discount: 0.9
   defaultQValue: 2
-  eligibilityDecay: 0.9
+  eligibilityDecay: 0
 --- !u!4 &605723068
 Transform:
   m_ObjectHideFlags: 0
@@ -760,6 +760,25 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ab23ab6228468b2479f51528effae20e, type: 3}
   m_PrefabInstance: {fileID: 2080300217}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &2080300219
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080300218}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!111 &2080300221
 Animation:
   m_ObjectHideFlags: 0

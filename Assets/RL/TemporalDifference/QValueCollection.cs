@@ -98,4 +98,30 @@ public class QValueCollection :
         return str;
     }
 
+    public float Max()
+    {
+        float max = Single.MinValue;
+        foreach(State s in Keys)
+        {
+            foreach(EnvironmentAction a in this[s].Keys)
+            {
+                if (max < this[s][a]._stateActionValue) max = this[s][a]._stateActionValue;
+            }
+        }
+        return max;
+    }
+
+    public float Min()
+    {
+        float min = Single.MaxValue;
+        foreach (State s in Keys)
+        {
+            foreach (EnvironmentAction a in this[s].Keys)
+            {
+                if (min > this[s][a]._stateActionValue) min = this[s][a]._stateActionValue;
+            }
+        }
+        return min;
+    }
+
 }
