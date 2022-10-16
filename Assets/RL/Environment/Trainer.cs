@@ -5,7 +5,7 @@ using System.IO;
 public abstract class Trainer : MonoBehaviour
 {
     protected Agent _agent;
-    protected Reward _reward;
+    protected Reward _cumulatedReward;
 
     protected int _step = 0;
 
@@ -32,7 +32,7 @@ public abstract class Trainer : MonoBehaviour
 
         CumulativeRewardEpisodes = new List<float>();
         _agent = gameObject.GetComponent<Agent>();
-        _reward = new Reward(0);
+        _cumulatedReward = new Reward(0);
     }
 
     public abstract void ChargeTraining();
@@ -89,8 +89,8 @@ public abstract class Trainer : MonoBehaviour
     public virtual void EndEpisode()
     {
         _agent.Initialise();
-        CumulativeRewardEpisodes.Add(_reward.Value);
-        _reward = new Reward(0);
+        CumulativeRewardEpisodes.Add(_cumulatedReward.Value);
+        _cumulatedReward = new Reward(0);
         episodeCounter += 1;
 
         if (episodeCounter >= maxNumberOfEpisode)

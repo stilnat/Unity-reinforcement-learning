@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class WalkerTraining : Trainer
 { 
 
-    private TabularQLearning _trainingMethod;
+    public TabularQLearning _trainingMethod;
 
     public float learnRate = 0.9f;
     public float learnRateMultiplier = 0.005f;
@@ -16,6 +16,8 @@ public class WalkerTraining : Trainer
     public float epsilonMinimum = 0.01f;
     public float discount = 1f;
     public float defaultQValue = 0;
+
+    
 
 
     // Start is called before the first frame update
@@ -28,6 +30,7 @@ public class WalkerTraining : Trainer
 
     public override void FixedUpdate()
     {
+        base.FixedUpdate();
         if (_updateCount % _nFrame == 0)
         {
             if (_agent.State.IsTerminal)
@@ -37,7 +40,7 @@ public class WalkerTraining : Trainer
 
             if (_agent.State.IsTerminal == false)
             {
-                _trainingMethod.Step(_agent);
+                _cumulatedReward = _cumulatedReward + _trainingMethod.Step(_agent);
                 epsilon = _trainingMethod._epsilon;
                 learnRate = _trainingMethod._learnRate;
             }
