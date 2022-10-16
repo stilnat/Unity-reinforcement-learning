@@ -21,7 +21,14 @@ public class Reward
         _value = reward;
     }
 
-    
+    public static Reward operator +(Reward r1, Reward r2)
+    {
+        Reward r3 = new Reward(0);
+        r3.Value = r1.Value + r2.Value;
+        return r3;
+    }
+
+
 
 
 
