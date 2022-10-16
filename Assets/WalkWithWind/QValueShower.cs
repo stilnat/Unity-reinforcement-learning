@@ -55,6 +55,7 @@ public class QValueShower : MonoBehaviour
             }
             else
             {
+                _colorRectangle.enabled = false;
                 _colorRectangle.material.SetColor("_Color", new Color(255, 255, 255));
             }
     }
