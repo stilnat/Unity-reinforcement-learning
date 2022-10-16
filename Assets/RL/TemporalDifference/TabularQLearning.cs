@@ -44,7 +44,7 @@ public class TabularQLearning
         _learnRateMinimum = learnRateMinimum;
     }
 
-    public void Step(Agent agent)
+    public Reward Step(Agent agent)
     {
         State currentS = agent.State;
         if (!_qValues.ContainsKey(agent.State)) InitialiseQValues(_qValues, currentS, agent, _defaultQValue);
@@ -59,6 +59,7 @@ public class TabularQLearning
         if (HasLearnRateMultiplier) ComputeNewLearnRate();
         if (HasEpsilonMultiplier) ComputeNewEpsilon();
         _step += 1;
+        return currentR;
     }
 
     private void ComputeNewEpsilon() 
