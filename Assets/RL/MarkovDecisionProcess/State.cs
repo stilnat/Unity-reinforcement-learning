@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class State : MatrixND
 {
-
+    [SerializeField]
     private bool _isTerminal;
+
+    [SerializeField]
     private string _name;
 
     public bool IsTerminal
@@ -55,11 +58,11 @@ public class State : MatrixND
     {
         if (_name == null)
         {
-            return base.ToString() + "final = " + _isTerminal;
+            return base.ToString() + " : " + _isTerminal;
         }
         else
         {
-            return _name + ": " + base.ToString() + "final = " + _isTerminal;
+            return _name + ": " + base.ToString() + " : " + _isTerminal;
         }
 
     }

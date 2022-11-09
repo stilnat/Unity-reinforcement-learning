@@ -2,7 +2,8 @@
     "name": "MonteCarloScripts",
     "rootNamespace": "",
     "references": [
-        "GUID:3428e624883adbb4abde040af1baef03"
+        "GUID:3428e624883adbb4abde040af1baef03",
+        "GUID:0d938854fb895854db7043424bffff0a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

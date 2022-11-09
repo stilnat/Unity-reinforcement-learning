@@ -1,5 +1,6 @@
 using System;
 
+[System.Serializable]
 public class StateActionValue : IComparable
 {
     public StateActionValue(float stateActionValue, int numberOfVisit)
@@ -26,5 +27,10 @@ public class StateActionValue : IComparable
         if (_stateActionValue < stateActionvalueObject._stateActionValue) return -1;
         else if (_stateActionValue > stateActionvalueObject._stateActionValue) return 1;
         else return 0;
+    }
+
+    public override string ToString()
+    {
+        return _stateActionValue.ToString();
     }
 }

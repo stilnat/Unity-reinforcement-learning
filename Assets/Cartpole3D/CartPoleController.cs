@@ -38,9 +38,5 @@ public class CartPoleController : MonoBehaviour
             //Apply a force to this Rigidbody in direction of this GameObjects up axis
             _Rigidbody.AddForce(transform.right * _Thrust);
         }
-
-
-
-
     }
 }

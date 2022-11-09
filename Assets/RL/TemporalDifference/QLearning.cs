@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine;
 
 public class QLearning
 {
@@ -71,6 +72,9 @@ public class QLearning
 
         return currentReward.Value + discount * maxStateActionValue - actionStateValueDictionary[currentState][currentAction]._stateActionValue;
     }
+
+
+
 
 
 

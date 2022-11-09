@@ -1,0 +1,18 @@
+{
+    "name": "Cartpole3DAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3428e624883adbb4abde040af1baef03",
+        "GUID:0d938854fb895854db7043424bffff0a",
+        "GUID:58017a80696a40d4ab103c7c206669c7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
