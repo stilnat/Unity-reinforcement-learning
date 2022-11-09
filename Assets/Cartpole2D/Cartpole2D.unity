@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 627107568}
   - component: {fileID: 627107567}
   - component: {fileID: 627107566}
+  - component: {fileID: 627107569}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -354,6 +355,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -22.035, z: 0}
+--- !u!114 &627107569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627107565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436275a13d4459746955fc6db5953473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _active: 1
+  _enableRotation: 1
+  _mouseSense: 1.8
+  _enableTranslation: 1
+  _translationSpeed: 55
+  _enableMovement: 1
+  _movementSpeed: 10
+  _boostedSpeed: 50
+  _boostSpeed: 304
+  _moveUp: 101
+  _moveDown: 113
+  _enableSpeedAcceleration: 1
+  _speedAccelerationFactor: 1.5
+  _initPositonButton: 114
 --- !u!1 &892154752
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,16 +511,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303d1e1428af1894abe263e657b283ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  render: 1
   timeScale: 3
+  render: 1
+  chargeData: 0
+  SaveData: 0
+  _updateCount: 0
+  _nFrame: 10
   maxNumberOfEpisode: 10000
-  learningRate: 1
-  learningRateMultiplier: 0.012
-  learningRateMinimum: 0.01
-  epsilon: 1
-  epsilonMultiplier: 0.999
-  epsilonMinimum: 0.02
+  episodeCounter: 0
   CumulativeRewardEpisodes: []
+  learnRate: 0.95
+  learnRateMultiplier: 1
+  learnRateMinimum: 0.95
+  epsilon: 0.02
+  epsilonMultiplier: 0.1
+  epsilonMinimum: 0.02
+  discount: 0.97
+  defaultQValue: 100
 --- !u!114 &1153010893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,6 +540,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f73db10d4e304944a035dac42432b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _state:
+    _array: []
+    _dimensions: 
+    _dimensionsProduct: 
+    _isTerminal: 0
+    _name: 
   _initialise: 0
   _pole: {fileID: 436964023}
   _nFrame: 0

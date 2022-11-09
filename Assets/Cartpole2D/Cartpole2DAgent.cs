@@ -124,7 +124,7 @@ public class Cartpole2DAgent : Agent
 
     public override Reward ObserveReward()
     {
-        if (_state.IsTerminal) return new Reward(-1000);
+        if (_state.IsTerminal) return new Reward(0);
         else return new Reward(1);
     }
 

@@ -16,8 +16,9 @@ public class Cartpole2DTraining : Trainer
     public float epsilon = 1f;
     public float epsilonMultiplier = 0.999f;
     public float epsilonMinimum = 0.05f;
-    public float discount = 1f;
-    public float defaultQValue = 0;
+    public float discount = 0.2f;
+    public float defaultQValue = 40;
+    
 
     // Start is called before the first frame update
     public override void Start()
@@ -39,7 +40,7 @@ public class Cartpole2DTraining : Trainer
 
             if (_agent.State.IsTerminal == false)
             {
-                _trainingMethod.Step(_agent);
+                _cumulatedReward += _trainingMethod.Step(_agent);
             }
         }
     }
